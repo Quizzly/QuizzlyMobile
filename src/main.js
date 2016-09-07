@@ -1,8 +1,9 @@
 /**
  * Quizzly React Native App
+ * Main
  * @keionanvari
  */
- 
+
 'use strict';
 import React, { Component } from 'react';
 import {

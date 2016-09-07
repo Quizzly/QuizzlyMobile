@@ -1,5 +1,10 @@
-'use strict';
+/**
+ * Quizzly React Native App
+ * Login
+ * @keionanvari
+ */
 
+'use strict';
 import React, { Component } from 'react';
 import {
    StyleSheet,
@@ -21,17 +26,21 @@ module.exports = React.createClass({
                <Text style={styles.quizzly}>QUIZZLY</Text>
                <Image
                   style={styles.logo}
-                  source={require('./images/quizzly-logo.png')}
+                  source={require('./images/logo.png')}
                   />
                <View style={styles.loginContainer}>
+
                   <View style={styles.fields}>
+
                      <TextInput
                         style={styles.input}
                         value={this.state.email}
+                        keyboardType={'email-address'}
                         onChangeText={(text) => this.setState({email: text})}
                         placeholder={'School Email'}
                         placeholderTextColor="#FFFFFF"
                         />
+
                      <View style={styles.separator} />
                      <View style={{padding: 10}} />
 
@@ -44,6 +53,7 @@ module.exports = React.createClass({
                         placeholderTextColor="#FFFFFF"
                         />
                      <View style={styles.separator} />
+
                   </View>
 
                   <TouchableHighlight
@@ -95,9 +105,9 @@ var styles = StyleSheet.create({
       fontSize: 28,
       textAlign: 'center',
       alignSelf: 'center',
-      borderBottomColor: '#48BBEC',
-      borderBottomWidth: 1,
-      borderTopWidth: 0,
+      // borderBottomColor: '#48BBEC',
+      // borderBottomWidth: 1,
+      // borderTopWidth: 0,
       color: 'white'
       //backgroundColor: '#ffffff'
    },
@@ -121,7 +131,8 @@ var styles = StyleSheet.create({
       textAlign: 'center',
       margin: 20,
       top: 15,
-      padding: 25
+      padding: 25,
+
    },
    loginContainer: {
 
