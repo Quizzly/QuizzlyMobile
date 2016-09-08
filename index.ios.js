@@ -10,6 +10,6 @@ import {
   AppRegistry
 } from 'react-native';
 
-var Main = require('./src/main')
+import App from './src/App'
 
-AppRegistry.registerComponent('QuizzlyMobile', () => Main);
+AppRegistry.registerComponent('QuizzlyMobile', () => App);
