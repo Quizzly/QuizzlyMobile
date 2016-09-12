@@ -17,10 +17,12 @@ export default class Entrance extends Component {
     super(props);
     this.state = {
       courses: [
-        {title: 'CSCI 201', ratio:'3/77', index: 0},
-        {title: 'CSCI 401', ratio:'23/34',  index: 1},
-        {title: 'CSCI 104', ratio:'1/10', index: 2},
-        {title: 'CSCI 103', ratio:'2/37', index: 3},
+        {title: 'What is threading and how do we use it in computer science?',
+        A:'It is designed by a Germany scientist',
+        B:'It is just an imaginary concept which sounds cool',
+        C:'The threading is things going on at the same time',
+        D:'We use it with locks and Vs often and a lot',
+        index:'0'},
       ]
     };
   }
@@ -43,23 +45,44 @@ export default class Entrance extends Component {
   }
 
   renderTextWells() {
-    return (
-      <View>
-        <Text>3.)</Text>
-        <TextWell
-          text="What is threading and how do we use it in computer science?"
-          color="green"
-          style={[styles.textWellSpacing, {marginTop: 10}]}
-        />
 
-        <Text>D.)</Text>
-        <TextWell
-          text="We use it with locks and Vs often and a lot"
-          color="red"
-          style={styles.textWellSpacing}
-        />
-      </View>
-    );
+    return this.state.courses.map((course, i) => {
+      console.log("+++++++++++++++++", course.title);
+      return (
+        <View>
+          <Text>Question</Text>
+          <TextWell
+            text={course.title}
+            color="red"
+            style={[styles.textWellSpacing, {marginTop: 10}]}
+          />
+          <Text>A.)</Text>
+          <TextWell
+            text={course.A}
+            color="blue"
+            style={styles.textWellSpacing}
+          />
+          <Text>B.)</Text>
+          <TextWell
+            text={course.B}
+            color="blue"
+            style={styles.textWellSpacing}
+          />
+          <Text>C.)</Text>
+          <TextWell
+            text={course.C}
+            color="blue"
+            style={styles.textWellSpacing}
+          />
+          <Text>D.)</Text>
+          <TextWell
+            text={course.D}
+            color="blue"
+            style={styles.textWellSpacing}
+          />
+        </View>
+      );
+    });
   }
 
   renderCourses() {
@@ -79,9 +102,8 @@ export default class Entrance extends Component {
     return (
       <View style={styles.container}>
         <Text>Render the Navigation Bar Here.</Text>
+        {this.renderTextWells()}
 
-
-        {this.renderCourses()}
 
         <TouchableHighlight
           style={styles.button}

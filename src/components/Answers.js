@@ -16,12 +16,7 @@ export default class Entrance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: [
-        {title: 'CSCI 201', ratio:'3/77', index: 0},
-        {title: 'CSCI 401', ratio:'23/34',  index: 1},
-        {title: 'CSCI 104', ratio:'1/10', index: 2},
-        {title: 'CSCI 103', ratio:'2/37', index: 3},
-      ]
+      courses: []
     };
   }
 
@@ -51,7 +46,6 @@ export default class Entrance extends Component {
           color="green"
           style={[styles.textWellSpacing, {marginTop: 10}]}
         />
-
         <Text>D.)</Text>
         <TextWell
           text="We use it with locks and Vs often and a lot"
@@ -79,9 +73,8 @@ export default class Entrance extends Component {
     return (
       <View style={styles.container}>
         <Text>Render the Navigation Bar Here.</Text>
+        {this.renderTextWells()}
 
-
-        {this.renderCourses()}
 
         <TouchableHighlight
           style={styles.button}

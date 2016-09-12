@@ -17,10 +17,14 @@ export default class Entrance extends Component {
     super(props);
     this.state = {
       courses: [
-        {title: 'CSCI 201', ratio:'3/77', index: 0},
-        {title: 'CSCI 401', ratio:'23/34',  index: 1},
-        {title: 'CSCI 104', ratio:'1/10', index: 2},
-        {title: 'CSCI 103', ratio:'2/37', index: 3},
+        {title: 'Q1', ratio:'0/1', index: 0},
+        {title: 'Q2', ratio:'0/1', index: 1},
+        {title: 'Q3', ratio:'0/1', index: 2},
+        {title: 'Q4', ratio:'0/1', index: 3},
+        {title: 'Q5', ratio:'0/1', index: 4},
+        {title: 'Q6', ratio:'0/1', index: 5},
+        {title: 'Q7', ratio:'0/1', index: 6},
+        {title: 'Q8', ratio:'0/1', index: 7},
       ]
     };
   }
@@ -81,7 +85,8 @@ export default class Entrance extends Component {
         <Text>Render the Navigation Bar Here.</Text>
 
 
-        {this.renderCourses()}
+        {this.renderTextWells()}
+
 
         <TouchableHighlight
           style={styles.button}

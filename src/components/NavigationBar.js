@@ -10,7 +10,7 @@ import {
 import s from '../modules/Style';
 import Row from '../elements/Row';
 
-export default class CourseRow extends Component {
+export default class NavigationBar extends Component {
   constructor(props) {
     super(props);
   }
@@ -28,7 +28,7 @@ export default class CourseRow extends Component {
         </Text>
         <View style={styles.endInfoContainer}>
           <Text style={[s.p, styles.grade]}>
-            {pr.course.ratio}
+            3 / 77
           </Text>
           <Text style={styles.arrow}>
             >
