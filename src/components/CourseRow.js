@@ -1,9 +1,16 @@
+/**
+ * Quizzly React Native App
+ * Main
+ * @keionanvari
+ */
+
 'use strict';
 import React, { Component } from 'react';
 import {
   View,
   Text,
   StyleSheet,
+  ScrollView,
   TouchableHighlight,
 } from 'react-native';
 

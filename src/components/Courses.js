@@ -1,108 +1,137 @@
+'use strict';
 import React, { Component } from 'react';
 import {
-  Text,
-  View,
-  TouchableHighlight,
-  StyleSheet,
+   Text,
+   View,
+   TouchableHighlight,
+   StyleSheet, TableView, ListView
 } from 'react-native';
 
-import s from '../modules/Style.js';
 import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
 import CourseRow from './CourseRow'
 import Api from '../modules/Api'
+import s from '../modules/Style.js';
+import LinearGradient from 'react-native-linear-gradient';
+import NavBar from './NavBar.js'
 
 export default class Entrance extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      courses: []
-    };
-  }
+   constructor(props) {
+      super(props);
+      var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      this.state = {
+         courses: [],
+         dataSource: ds.cloneWithRows(['row1', 'row2'])
+      };
+   }
 
-  back() {
-    this.props.navigator.pop();
-  }
+   back() {
+      this.props.navigator.pop();
+   }
 
-  componentDidMount() {
-    console.log("Hey what's up");
-    Api.server.find('course')
-    .then((courses) => {
-      console.log("courses", courses);
-      this.setState({courses: courses});
-    });
-  }
+   componentDidMount() {
+      console.log("Mounting...");
+      var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
+      Api.server.find('course')
+      .then((courses) => {
+         console.log("courses", courses);
+         this.setState({
+            courses: courses,
+            dataSource: ds.cloneWithRows(this.coursesToMap())
+         });
+      });
+   }
+   goToCourse(course) {
+      console.log("course", course);
+   }
+   coursesToMap() {
+      // THIS DOESNT WORK LIKE I WANT IT TO
+      var coursesMap = ['hey1', 'hey2', 'done'];
+      this.state.courses.map((course, i) => {
+         console.log("+++++++hey+++++++");
+         coursesMap.push(<CourseRow
+             key={i}
+             course={course}
+             goToCourse={this.goToCourse.bind(this)}
+          />);
+      });
+      return coursesMap;
+   }
 
-  goToCourse(course) {
-    console.log("course", course);
-  }
-
-  renderTextWells() {
-    return (
-      <View>
-        <TextWell
-          text="Hello I'm a green text box that like to talk way too much!  I like to be right all the time whenever I can. So please say things for me to feel happy about!"
-          color="green"
-          style={[styles.textWellSpacing, {marginTop: 10}]}
-        />
-        <TextWell
-          text="I'm a cool blue piece of text that most people like reading.  Especially when they are angry or feeling really red!"
-          color="blue"
-          style={styles.textWellSpacing}
-        />
-        <TextWell
-          text="I'm red.  I'm always angry and always wrong!"
-          color="red"
-          style={styles.textWellSpacing}
-        />
-      </View>
-    );
-  }
-
-  renderCourses() {
-    return this.state.courses.map((course, i) => {
-      console.log("+++++++++++++++++", course.title);
+   renderNavBar(){
       return (
-          <CourseRow
-            key={i}
-            course={course}
-            goToCourse={this.goToCourse.bind(this)}
-          />
+         <View>
+            <NavBar
+               title={'Courses'}
+               back={this.back.bind(this)}
+               hasBack
+            />
+         </View>
       );
-    });
-  }
+   }
+   renderTable() {
+      return (
+         <ListView
+            dataSource={this.state.dataSource}
+            renderRow={(rowData) => <Text>{rowData}</Text>}
+         />
+      );
+   }
+   renderTableView(){
+      return this.state.courses.map((course, i) => {
+         console.log("+++++++++++++++++", course.title);
+         return (
+            <ListView
+               dataSource={this.state.dataSource}
+               renderRow={(rowData) => <CourseRow
+                   key={i}
+                   course={course}
+                   goToCourse={this.goToCourse.bind(this)}
+                />}
+            />
+         );
+      });
+   }
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>I am the Courses page.</Text>
-        <Text>This is the email prop passed in: {this.props.email}</Text>
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.back.bind(this)}
-        >
-          <Text>Click me to go back to Entrance</Text>
-        </TouchableHighlight>
-        {this.renderTextWells()}
-        {this.renderCourses()}
-      </View>
-    );
-  }
+   renderCourses() {
+      return this.state.courses.map((course, i) => {
+         console.log("+++++++++++++++++", course.title);
+         return (
+            <CourseRow
+                key={i}
+                course={course}
+                goToCourse={this.goToCourse.bind(this)}
+             />
+
+         );
+      });
+   }
+
+   render() {
+      return (
+         <View style={styles.container}>
+
+         {this.renderNavBar()}
+         {/* {this.renderTableView()} */}
+         {/* {this.renderTable()} */}
+         {this.renderCourses()}
+         </View>
+      );
+   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 30
-  },
-  button: {
-    padding: 20,
-    backgroundColor: 'green',
-    alignSelf: 'center',
-    borderRadius: 10
-  },
-  textWellSpacing: {
-    marginHorizontal: 10,
-    marginBottom: 10
-  },
+   container: {
+      flex: 1,
+   },
+   button: {
+      //padding: 20,
+      backgroundColor: 'green',
+      alignSelf: 'center',
+      borderRadius: 10
+   },
+   textWellSpacing: {
+      marginHorizontal: 10,
+      marginBottom: 10
+   },
 });
