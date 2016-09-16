@@ -37,7 +37,7 @@ export default class Entrance extends Component {
          console.log("courses", courses);
          this.setState({
             courses: courses,
-            dataSource: ds.cloneWithRows(this.coursesToMap())
+            dataSource: ds.cloneWithRows(courses)
          });
       });
    }
@@ -46,15 +46,13 @@ export default class Entrance extends Component {
    }
    coursesToMap() {
       // THIS DOESNT WORK LIKE I WANT IT TO
-      var coursesMap = ['hey1', 'hey2', 'done'];
+      // var coursesMap = ['hey1', 'hey2', 'done'];
+      var coursesMap = [];
       this.state.courses.map((course, i) => {
          console.log("+++++++hey+++++++");
-         coursesMap.push(<CourseRow
-             key={i}
-             course={course}
-             goToCourse={this.goToCourse.bind(this)}
-          />);
+         coursesMap.push();
       });
+      console.log("coursesMap", coursesMap);
       return coursesMap;
    }
 
@@ -62,18 +60,28 @@ export default class Entrance extends Component {
       return (
          <View>
             <NavBar
-               title={'Courses'}
+               title="Courses"
                back={this.back.bind(this)}
                hasBack
             />
          </View>
       );
    }
+
+   renderCourses(rowData) {
+     var course = rowData;
+     return (
+       <CourseRow
+           course={course}
+           goToCourse={this.goToCourse.bind(this)}
+        />
+     );
+   }
    renderTable() {
       return (
          <ListView
             dataSource={this.state.dataSource}
-            renderRow={(rowData) => <Text>{rowData}</Text>}
+            renderRow={this.renderCourses.bind(this)}
          />
       );
    }
@@ -93,28 +101,28 @@ export default class Entrance extends Component {
       });
    }
 
-   renderCourses() {
-      return this.state.courses.map((course, i) => {
-         console.log("+++++++++++++++++", course.title);
-         return (
-            <CourseRow
-                key={i}
-                course={course}
-                goToCourse={this.goToCourse.bind(this)}
-             />
-
-         );
-      });
-   }
+  //  renderCourses() {
+  //     return this.state.courses.map((course, i) => {
+  //        console.log("+++++++++++++++++", course.title);
+  //        return (
+  //           <CourseRow
+  //               key={i}
+  //               course={course}
+  //               goToCourse={this.goToCourse.bind(this)}
+  //            />
+   //
+  //        );
+  //     });
+  //  }
 
    render() {
       return (
          <View style={styles.container}>
 
          {this.renderNavBar()}
-         {/* {this.renderTableView()} */}
-         {/* {this.renderTable()} */}
-         {this.renderCourses()}
+          {/*{this.renderTableView()} */}
+          {this.renderTable()}
+         {/*{this.renderCourses()}*/}
          </View>
       );
    }
