@@ -16,15 +16,7 @@ export default class Entrance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: [
-        {title: 'Q1', ratio:'0/1', index: 0},
-        {title: 'Q2', ratio:'0/1', index: 1},
-        {title: 'Q3', ratio:'0/1', index: 2},
-        {title: 'Q4', ratio:'0/1', index: 3},
-        {title: 'Q5', ratio:'0/1', index: 4},
-        {title: 'Q6', ratio:'0/1', index: 5},
-        {title: 'Q7', ratio:'0/1', index: 6},
-        {title: 'Q8', ratio:'0/1', index: 7},
+      quizzes: [
       ]
     };
   }
@@ -36,14 +28,17 @@ export default class Entrance extends Component {
   componentDidMount() {
     console.log("Hey what's up");
     Api.server.find('course')
-    .then((courses) => {
-      console.log("courses", courses);
-      this.setState({courses: courses});
+    //test the quiz with course for now
+    .then((quizzes) => {
+      console.log("quizzes", quizzes);
+      this.setState({quizzes: quizzes});
     });
   }
 
-  goToCourse(course) {
-    console.log("course", course);
+  goToQuizzList(course) {
+    this.props.navigator.push({
+      name: 'QuizzList',
+    });
   }
 
   renderTextWells() {
@@ -67,13 +62,13 @@ export default class Entrance extends Component {
   }
 
   renderCourses() {
-    return this.state.courses.map((course, i) => {
-      console.log("+++++++++++++++++", course.title);
+    return this.state.quizzes.map((quiz, i) => {
+      console.log("+++++++++++++++++", quiz.title);
       return (
           <CourseRow
             key={i}
-            course={course}
-            goToCourse={this.goToCourse.bind(this)}
+            course={quiz}
+            goToCourse={this.goToQuizzList.bind(this)}
           />
       );
     });
@@ -84,9 +79,7 @@ export default class Entrance extends Component {
       <View style={styles.container}>
         <Text>Render the Navigation Bar Here.</Text>
 
-
-        {this.renderTextWells()}
-
+        {this.renderCourses()}
 
         <TouchableHighlight
           style={styles.button}

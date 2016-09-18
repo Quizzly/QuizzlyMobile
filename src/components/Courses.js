@@ -17,10 +17,6 @@ export default class Entrance extends Component {
     super(props);
     this.state = {
       courses: [
-        {title: 'CSCI 201', ratio:'3/77', index: 0},
-        {title: 'CSCI 401', ratio:'23/34',  index: 1},
-        {title: 'CSCI 104', ratio:'1/10', index: 2},
-        {title: 'CSCI 103', ratio:'2/37', index: 3},
       ]
     };
   }
@@ -38,8 +34,10 @@ export default class Entrance extends Component {
     });
   }
 
-  goToCourse(course) {
-    console.log("course", course);
+  goToQuizzList(course) {
+    this.props.navigator.push({
+      name: 'QuizzList',
+    });
   }
 
   renderTextWells() {
@@ -69,7 +67,7 @@ export default class Entrance extends Component {
           <CourseRow
             key={i}
             course={course}
-            goToCourse={this.goToCourse.bind(this)}
+            goToCourse={this.goToQuizzList.bind(this)}
           />
       );
     });
@@ -79,7 +77,6 @@ export default class Entrance extends Component {
     return (
       <View style={styles.container}>
         <Text>Render the Navigation Bar Here.</Text>
-
 
         {this.renderCourses()}
 

@@ -12,7 +12,7 @@ import Row from '../elements/Row'
 import CourseRow from './CourseRow'
 import Api from '../modules/Api'
 
-export default class Entrance extends Component {
+export default class Questions extends Component {
   constructor(props) {
     super(props);
     this.state = {
