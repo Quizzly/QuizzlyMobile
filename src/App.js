@@ -14,6 +14,7 @@ import {
 
 import Entrance from './components/Entrance';
 import Courses from './components/Courses';
+import Course from './components/Course';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -28,6 +29,8 @@ export default class App extends React.Component {
         return <Entrance navigator={navigator} {...route.passProps}  />
       case 'Courses':
         return <Courses navigator={navigator} {...route.passProps}  />
+      case 'Course':
+         return <Course navigator={navigator} {...route.passProps}  />
     }
   }
 

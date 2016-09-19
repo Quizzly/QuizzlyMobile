@@ -41,19 +41,14 @@ export default class Entrance extends Component {
          });
       });
    }
+
    goToCourse(course) {
       console.log("course", course);
-   }
-   coursesToMap() {
-      // THIS DOESNT WORK LIKE I WANT IT TO
-      // var coursesMap = ['hey1', 'hey2', 'done'];
-      var coursesMap = [];
-      this.state.courses.map((course, i) => {
-         console.log("+++++++hey+++++++");
-         coursesMap.push();
+      this.props.navigator.push({
+        name: 'Course',
+        passProps: {course: course, title:course.title, state:this.state }
       });
-      console.log("coursesMap", coursesMap);
-      return coursesMap;
+
    }
 
    renderNavBar(){
@@ -85,44 +80,14 @@ export default class Entrance extends Component {
          />
       );
    }
-   renderTableView(){
-      return this.state.courses.map((course, i) => {
-         console.log("+++++++++++++++++", course.title);
-         return (
-            <ListView
-               dataSource={this.state.dataSource}
-               renderRow={(rowData) => <CourseRow
-                   key={i}
-                   course={course}
-                   goToCourse={this.goToCourse.bind(this)}
-                />}
-            />
-         );
-      });
-   }
-
-  //  renderCourses() {
-  //     return this.state.courses.map((course, i) => {
-  //        console.log("+++++++++++++++++", course.title);
-  //        return (
-  //           <CourseRow
-  //               key={i}
-  //               course={course}
-  //               goToCourse={this.goToCourse.bind(this)}
-  //            />
-   //
-  //        );
-  //     });
-  //  }
 
    render() {
       return (
          <View style={styles.container}>
 
-         {this.renderNavBar()}
-          {/*{this.renderTableView()} */}
+          {this.renderNavBar()}
           {this.renderTable()}
-         {/*{this.renderCourses()}*/}
+
          </View>
       );
    }
