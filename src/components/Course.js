@@ -21,11 +21,17 @@ export default class Course extends Component {
    }
    takeQuiz(){
       console.log("Take quiz...");
+      this.props.navigator.push({
+        name: 'QuizzList',
+        passProps: {course: this.props.course, title:this.props.course.title, state:this.state}
+      });
       //Need to get access quiz socket ??
    }
 
    viewScores(){
       console.log("View Scores...");
+
+
       //Need to get access to scores ??
    }
    renderNavBar(){
@@ -70,6 +76,8 @@ export default class Course extends Component {
          <View style={styles.container}>
          {this.renderNavBar()}
          {this.renderBody()}
+         <Text style={styles.connectedLabel}>Connected</Text>
+
          </View>
       );
    }
@@ -102,5 +110,10 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontStyle: 'italic',
       color: s.black
+   },
+   connectedLabel:{
+      marginTop:450,
+      color:'green',
+      alignSelf:'center'
    }
 });
