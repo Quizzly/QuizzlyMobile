@@ -16,7 +16,7 @@ export default class Questions extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      courses: [
+      questions: [
         {title: 'What is threading and how do we use it in computer science?',
         A:'It is designed by a Germany scientist',
         B:'It is just an imaginary concept which sounds cool',
@@ -31,52 +31,58 @@ export default class Questions extends Component {
     this.props.navigator.pop();
   }
 
-  componentDidMount() {
-    console.log("Hey what's up");
-    Api.server.find('course')
-    .then((courses) => {
-      console.log("courses", courses);
-      this.setState({courses: courses});
-    });
-  }
+  //replace the function that finds corresponding questions
 
-  goToCourse(course) {
-    console.log("course", course);
+  // componentDidMount() {
+  //   console.log("Hey what's up");
+  //   Api.server.find('course')
+  //   .then((courses) => {
+  //     console.log("courses", courses);
+  //     this.setState({courses: courses});
+  //   });
+  // }
+
+  goToAnswers(course) {
+    this.props.navigator.push({
+      //parse in the unique quiz id here.
+      //dynamic generaiton of the questins needed.
+      name: 'Answers',
+    });
   }
 
   renderTextWells() {
 
-    return this.state.courses.map((course, i) => {
-      console.log("+++++++++++++++++", course.title);
+    return this.state.questions.map((question, i) => {
+      console.log("+++++++++++++++++", question.title);
       return (
         <View>
           <Text>Question</Text>
           <TextWell
-            text={course.title}
+            text={question.title}
             color="red"
             style={[styles.textWellSpacing, {marginTop: 10}]}
           />
           <Text>A.)</Text>
           <TextWell
-            text={course.A}
+            text={question.A}
             color="blue"
             style={styles.textWellSpacing}
           />
           <Text>B.)</Text>
           <TextWell
-            text={course.B}
+            text={question.B}
             color="blue"
             style={styles.textWellSpacing}
           />
           <Text>C.)</Text>
           <TextWell
-            text={course.C}
+            text={question.C}
             color="blue"
             style={styles.textWellSpacing}
           />
           <Text>D.)</Text>
           <TextWell
-            text={course.D}
+            text={question.D}
             color="blue"
             style={styles.textWellSpacing}
           />
@@ -86,8 +92,8 @@ export default class Questions extends Component {
   }
 
   renderCourses() {
-    return this.state.courses.map((course, i) => {
-      console.log("+++++++++++++++++", course.title);
+    return this.state.questions.map((question, i) => {
+      console.log("+++++++++++++++++", question.title);
       return (
           <CourseRow
             key={i}
@@ -106,11 +112,20 @@ export default class Questions extends Component {
 
 
         <TouchableHighlight
-          style={styles.button}
+          style={[styles.button, {marginTop: 20}]}
           onPress={this.back.bind(this)}
         >
           <Text>Click me to go back to Entrance</Text>
         </TouchableHighlight>
+
+        <TouchableHighlight
+          style={[styles.button, {marginTop: 20}]}
+          onPress={this.goToAnswers.bind(this)}
+        >
+          <Text>Click me to See the Answer</Text>
+        </TouchableHighlight>
+
+
       </View>
     );
   }

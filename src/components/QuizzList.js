@@ -27,7 +27,7 @@ export default class Entrance extends Component {
 
   componentDidMount() {
     console.log("Hey what's up");
-    Api.server.find('course')
+    Api.server.find('quiz')
     //test the quiz with course for now
     .then((quizzes) => {
       console.log("quizzes", quizzes);
@@ -37,7 +37,9 @@ export default class Entrance extends Component {
 
   goToQuizzList(course) {
     this.props.navigator.push({
-      name: 'QuizzList',
+      //parse in the unique quiz id here.
+      //dynamic generaiton of the questins needed.
+      name: 'Questions',
     });
   }
 
