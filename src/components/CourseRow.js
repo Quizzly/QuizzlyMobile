@@ -49,7 +49,7 @@ export default class CourseRow extends Component {
     var pr = this.props;
     return (
       <TouchableHighlight
-        onPress={pr.goToCourse.bind(this, pr.course)}
+        onPress={pr.goTo.bind(this, pr.course)}
       >
         <Row
           body={this.renderCourseRowBody()}

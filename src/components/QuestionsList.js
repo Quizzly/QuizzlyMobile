@@ -68,7 +68,7 @@ export default class Entrance extends Component {
     return (
       <QuestionRow
           question={question}
-          goToCourse={this.goToQuestions.bind(this, question)}
+          goTo={this.goToQuestions.bind(this, question)}
        />
     );
 
@@ -86,12 +86,8 @@ export default class Entrance extends Component {
   render() {
     return (
       <View style={styles.container}>
-
         {this.renderNavBar()}
-
         {this.renderTable()}
-
-
       </View>
     );
   }

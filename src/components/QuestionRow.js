@@ -46,7 +46,7 @@ export default class QuestionRow extends Component {
     var pr = this.props;
     return (
       <TouchableHighlight
-        onPress={pr.goToCourse.bind(this, pr.question)}
+        onPress={pr.goTo.bind(this, pr.question)}
       >
         <Row
           body={this.renderCourseRowBody()}

@@ -110,7 +110,7 @@ export default class Questions extends Component {
           <CourseRow
             key={i}
             course={course}
-            goToCourse={this.goToCourse.bind(this)}
+            goTo={this.goToCourse.bind(this)}
           />
       );
     });
