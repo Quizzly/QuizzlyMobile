@@ -3,7 +3,7 @@ import {
   Text,
   View,
   TouchableHighlight,
-  StyleSheet,
+  StyleSheet, TableView, ListView
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -11,13 +11,15 @@ import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
 import CourseRow from './CourseRow'
 import Api from '../modules/Api'
+import NavBar from './NavBar.js'
 
 export default class Entrance extends Component {
   constructor(props) {
     super(props);
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      quizzes: [
-      ]
+      quizzes: [],
+      dataSource: ds.cloneWithRows(['row1', 'row2'])
     };
   }
 
@@ -25,14 +27,31 @@ export default class Entrance extends Component {
     this.props.navigator.pop();
   }
 
+
   componentDidMount() {
     console.log("Hey what's up");
+    var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
     Api.server.find('quiz')
-    //test the quiz with course for now
     .then((quizzes) => {
       console.log("quizzes", quizzes);
-      this.setState({quizzes: quizzes});
+      this.setState({
+         quizzes: quizzes,
+         dataSource: ds.cloneWithRows(quizzes)
+
+      });
     });
+  }
+
+  renderNavBar(){
+     return (
+        <View>
+           <NavBar
+             title={this.props.course.title}
+             back={this.back.bind(this)}
+             hasBack
+           />
+        </View>
+     );
   }
 
   goToQuizzList(course) {
@@ -43,52 +62,35 @@ export default class Entrance extends Component {
     });
   }
 
-  renderTextWells() {
-    return (
-      <View>
-        <Text>3.)</Text>
-        <TextWell
-          text="What is threading and how do we use it in computer science?"
-          color="green"
-          style={[styles.textWellSpacing, {marginTop: 10}]}
-        />
 
-        <Text>D.)</Text>
-        <TextWell
-          text="We use it with locks and Vs often and a lot"
-          color="red"
-          style={styles.textWellSpacing}
-        />
-      </View>
+  renderCourses(rowData) {
+    var quiz = rowData;
+    console.log(">>>>>>>>>>>> Quiz",quiz);
+    return (
+      <CourseRow
+          course={quiz}
+          goToCourse={this.goToQuizzList.bind(this)}
+       />
     );
   }
-
-  renderCourses() {
-    return this.state.quizzes.map((quiz, i) => {
-      console.log("+++++++++++++++++", quiz.title);
-      return (
-          <CourseRow
-            key={i}
-            course={quiz}
-            goToCourse={this.goToQuizzList.bind(this)}
-          />
-      );
-    });
+  renderTable() {
+     return (
+        <ListView
+           dataSource={this.state.dataSource}
+           renderRow={this.renderCourses.bind(this)}
+        />
+     );
   }
+
 
   render() {
     return (
       <View style={styles.container}>
-        <Text>Render the Navigation Bar Here.</Text>
+        {this.renderNavBar()}
 
-        {this.renderCourses()}
+        {this.renderTable()}
 
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.back.bind(this)}
-        >
-          <Text>Click me to go back to Entrance</Text>
-        </TouchableHighlight>
+
       </View>
     );
   }
@@ -97,7 +99,6 @@ export default class Entrance extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30
   },
   button: {
     padding: 20,

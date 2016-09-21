@@ -1,9 +1,16 @@
+/**
+ * Quizzly React Native App
+ * Main
+ * @keionanvari
+ */
+
 'use strict';
 import React, { Component } from 'react';
 import {
   View,
   Text,
   StyleSheet,
+  ScrollView,
   TouchableHighlight,
 } from 'react-native';
 
@@ -28,7 +35,7 @@ export default class CourseRow extends Component {
         </Text>
         <View style={styles.endInfoContainer}>
           <Text style={[s.p, styles.grade]}>
-            {pr.course.ratio}
+            3 / 77
           </Text>
           <Text style={styles.arrow}>
             >

@@ -11,6 +11,7 @@ import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
 import CourseRow from './CourseRow'
 import Api from '../modules/Api'
+import NavBar from './NavBar.js'
 
 export default class Questions extends Component {
   constructor(props) {
@@ -90,6 +91,17 @@ export default class Questions extends Component {
       );
     });
   }
+  renderNavBar(){
+     return (
+        <View>
+           <NavBar
+              title="Courses"
+              back={this.back.bind(this)}
+              hasBack
+           />
+        </View>
+     );
+  }
 
   renderCourses() {
     return this.state.questions.map((question, i) => {
@@ -107,16 +119,9 @@ export default class Questions extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Render the Navigation Bar Here.</Text>
+        {this.renderNavBar()}
         {this.renderTextWells()}
 
-
-        <TouchableHighlight
-          style={[styles.button, {marginTop: 20}]}
-          onPress={this.back.bind(this)}
-        >
-          <Text>Click me to go back to Entrance</Text>
-        </TouchableHighlight>
 
         <TouchableHighlight
           style={[styles.button, {marginTop: 20}]}
@@ -134,7 +139,6 @@ export default class Questions extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 30
   },
   button: {
     padding: 20,

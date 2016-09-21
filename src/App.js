@@ -14,6 +14,7 @@ import {
 
 import Entrance from './components/Entrance';
 import Courses from './components/Courses';
+import Course from './components/Course';
 import Answers from './components/Answers';
 import Questions from './components/Questions';
 import QuizzList from './components/QuizzList';
@@ -31,6 +32,8 @@ export default class App extends React.Component {
         return <Entrance navigator={navigator} {...route.passProps}  />
       case 'Courses':
         return <Courses navigator={navigator} {...route.passProps}  />
+      case 'Course':
+         return <Course navigator={navigator} {...route.passProps}  />
       case 'Answers':
         return <Answers navigator={navigator} {...route.passProps}  />
       case 'Questions':

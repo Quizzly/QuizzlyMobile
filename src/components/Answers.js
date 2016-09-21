@@ -11,6 +11,7 @@ import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
 import CourseRow from './CourseRow'
 import Api from '../modules/Api'
+import NavBar from './NavBar.js'
 
 export default class Answers extends Component {
   constructor(props) {
@@ -56,6 +57,18 @@ export default class Answers extends Component {
     );
   }
 
+  renderNavBar(){
+     return (
+        <View>
+           <NavBar
+             title={"Courses"}
+             back={this.back.bind(this)}
+             hasBack
+           />
+        </View>
+     );
+  }
+
   renderCourses() {
     return this.state.courses.map((course, i) => {
       console.log("+++++++++++++++++", course.title);
@@ -72,7 +85,7 @@ export default class Answers extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text>Render the Navigation Bar Here.</Text>
+        {this.renderNavBar()}
         {this.renderTextWells()}
 
 
@@ -89,8 +102,7 @@ export default class Answers extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 30
+    flex: 1
   },
   button: {
     padding: 20,

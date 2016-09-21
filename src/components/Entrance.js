@@ -27,6 +27,13 @@ export default class Entrance extends Component {
     };
   }
 
+  componentDidMount(){
+     Api.server.find("student")
+     .then((students) => {
+        this.setState({student: students[0]})
+     })
+ }
+
   enterQuizzly() {
     this.goToCourses(this.state);
     // TODO: must add this back in
