@@ -22,7 +22,7 @@ export default class Course extends Component {
    takeQuiz(){
       console.log("Take quiz...");
       this.props.navigator.push({
-        name: 'QuizzList',
+        name: 'Questions',
         passProps: {course: this.props.course, title:this.props.course.title, state:this.state}
       });
       //Need to get access quiz socket ??
@@ -30,8 +30,10 @@ export default class Course extends Component {
 
    viewScores(){
       console.log("View Scores...");
-
-
+      this.props.navigator.push({
+        name: 'QuizzList',
+        passProps: {course: this.props.course, title:this.props.course.title, state:this.state}
+      });
       //Need to get access to scores ??
    }
    renderNavBar(){
