@@ -29,15 +29,13 @@ export default class Entrance extends Component {
 
 
   componentDidMount() {
-    console.log("Hey what's up");
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
-    Api.server.find('quiz')
+    Api.server.find('quiz',{course: this.props.course.id})
     .then((quizzes) => {
       console.log("quizzes", quizzes);
       this.setState({
          quizzes: quizzes,
          dataSource: ds.cloneWithRows(quizzes)
-
       });
     });
   }
@@ -59,6 +57,7 @@ export default class Entrance extends Component {
       //parse in the unique quiz id here.
       //dynamic generaiton of the questins needed.
       name: 'Questions',
+
     });
   }
 
