@@ -61,7 +61,7 @@ export default class Answers extends Component {
      return (
         <View>
            <NavBar
-             title={"Courses"}
+             title={"Answers"}
              back={this.back.bind(this)}
              hasBack
            />
