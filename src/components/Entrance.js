@@ -5,7 +5,7 @@ import {
   TouchableHighlight,
   StyleSheet,
   TextInput,
-  Image,
+  Image, PushNotificationIOS,
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -23,7 +23,8 @@ export default class Entrance extends Component {
       password: '',
       firstName: '',
       lastName: '',
-      isSignUp: false
+      isSignUp: false,
+      permissions: null
     };
   }
 
@@ -43,7 +44,14 @@ export default class Entrance extends Component {
     //   this.signIn();
     // }
   }
+  _showPermissions() {
+     console.log("Checking Perms...");
 
+     PushNotificationIOS.checkPermissions((permissions) => {
+       this.setState({permissions});
+       console.log('Perms: ', JSON.stringify(this.state.permissions));
+     });
+   }
   signUp() {
     var st = this.state;
     var user = {
@@ -60,6 +68,8 @@ export default class Entrance extends Component {
 
   signIn() {
     var st = this.state;
+    console.log("working...");
+
     var user = {
       email: st.email,
       password: st.password,
@@ -71,6 +81,7 @@ export default class Entrance extends Component {
   }
 
   goToCourses(props) {
+    this._showPermissions();
     this.props.navigator.push({
       name: 'Courses',
       passProps: props
