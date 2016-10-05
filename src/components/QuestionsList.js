@@ -9,7 +9,7 @@ import {
 import s from '../modules/Style.js';
 import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
-import CourseRow from './CourseRow'
+import QuestionRow from './QuestionRow'
 import Api from '../modules/Api'
 import NavBar from './NavBar.js'
 
@@ -18,7 +18,7 @@ export default class Entrance extends Component {
     super(props);
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
-      quizzes: [],
+      questions: [],
       dataSource: ds.cloneWithRows(['row1', 'row2'])
     };
   }
@@ -29,12 +29,12 @@ export default class Entrance extends Component {
 
   componentDidMount() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
-    Api.server.find('quiz',{course: this.props.course.id})
-    .then((quizzes) => {
-      console.log("quizzes", quizzes);
+    Api.server.find('question',{quiz: this.props.quiz.id})
+    .then((questions) => {
+      console.log("question", questions);
       this.setState({
-         quizzes: quizzes,
-         dataSource: ds.cloneWithRows(quizzes)
+         questions: questions,
+         dataSource: ds.cloneWithRows(questions)
       });
     });
   }
@@ -43,7 +43,7 @@ export default class Entrance extends Component {
      return (
         <View>
            <NavBar
-             title={this.props.course.title}
+             title={this.props.quiz.title}
              back={this.back.bind(this)}
              hasBack
            />
@@ -51,24 +51,27 @@ export default class Entrance extends Component {
      );
   }
 
-  goToQuestionsList(quiz) {
+  goToQuestions(question) {
     this.props.navigator.push({
-      //parse in the unique quiz id here.
+      //parse in the unique question id here.
       //dynamic generaiton of the questins needed.
-      name: 'QuestionsList',
-      passProps: {quiz: quiz}
+      name: 'Questions',
+      passProps: {question: question}
+      //, {...this.state}
     });
   }
 
+
   renderCourses(rowData) {
-    var quiz = rowData;
-    console.log(">>>>>>>>>>>> Quiz",quiz);
+    var question = rowData;
+    console.log(">>>>>>>>>>>> Question",question);
     return (
-      <CourseRow
-          course={quiz}
-          goTo={this.goToQuestionsList.bind(this,quiz)}
+      <QuestionRow
+          question={question}
+          goTo={this.goToQuestions.bind(this, question)}
        />
     );
+
   }
   renderTable() {
      return (
@@ -78,6 +81,7 @@ export default class Entrance extends Component {
         />
      );
   }
+
 
   render() {
     return (

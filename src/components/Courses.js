@@ -68,7 +68,7 @@ export default class Entrance extends Component {
      return (
        <CourseRow
            course={course}
-           goToCourse={this.goToCourse.bind(this)}
+           goTo={this.goToCourse.bind(this)}
         />
      );
    }

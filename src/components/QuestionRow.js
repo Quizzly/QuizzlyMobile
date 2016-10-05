@@ -17,13 +17,13 @@ import {
 import s from '../modules/Style';
 import Row from '../elements/Row';
 
-export default class CourseRow extends Component {
+export default class QuestionRow extends Component {
   constructor(props) {
     super(props);
   }
 
   componentDidMount() {
-    console.log(">>>>>>>>>>>> course", this.props.course);
+    console.log(">>>>>>>>>>>> question", this.props.question);
   }
 
   renderCourseRowBody() {
@@ -31,12 +31,9 @@ export default class CourseRow extends Component {
     return (
       <View style={styles.infoContainer}>
         <Text style={[s.p, s.italic]}>
-          {pr.course.title}
+          {pr.question.text}
         </Text>
         <View style={styles.endInfoContainer}>
-          <Text style={[s.p, styles.grade]}>
-            3 / 77
-          </Text>
           <Text style={styles.arrow}>
             >
           </Text>
@@ -49,7 +46,7 @@ export default class CourseRow extends Component {
     var pr = this.props;
     return (
       <TouchableHighlight
-        onPress={pr.goTo.bind(this, pr.course)}
+        onPress={pr.goTo.bind(this, pr.question)}
       >
         <Row
           body={this.renderCourseRowBody()}

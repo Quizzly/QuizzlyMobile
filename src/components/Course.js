@@ -19,19 +19,28 @@ export default class Course extends Component {
    back() {
       this.props.navigator.pop();
    }
+
+
+
    takeQuiz(){
       console.log("Take quiz...");
+      var question = {
+         text: 'Waiting on Question'
+
+      };
       this.props.navigator.push({
-        name: 'QuizzList',
-        passProps: {course: this.props.course, title:this.props.course.title, state:this.state}
+         name: 'Questions',
+         passProps: {course: this.props.course, title:this.props.course.title, state:this.state, question}
       });
       //Need to get access quiz socket ??
    }
 
    viewScores(){
       console.log("View Scores...");
-
-
+      this.props.navigator.push({
+         name: 'QuizzList',
+         passProps: {course: this.props.course, title:this.props.course.title, state:this.state}
+      });
       //Need to get access to scores ??
    }
    renderNavBar(){
@@ -52,17 +61,17 @@ export default class Course extends Component {
          <View>
 
          <TouchableHighlight
-         style={styles.button}
-         onPress={this.takeQuiz.bind(this)}
+            style={styles.button}
+            onPress={this.takeQuiz.bind(this)}
          >
-         <Text style={styles.buttonText}>Take Quiz</Text>
+            <Text style={styles.buttonText}>Take Quiz</Text>
          </TouchableHighlight>
 
          <TouchableHighlight
-         style={styles.scoresButton}
-         onPress={this.viewScores.bind(this)}
+            style={styles.scoresButton}
+            onPress={this.viewScores.bind(this)}
          >
-         <Text style={styles.buttonText}>View Scores</Text>
+            <Text style={styles.buttonText}>View Scores</Text>
          </TouchableHighlight>
 
          </View>

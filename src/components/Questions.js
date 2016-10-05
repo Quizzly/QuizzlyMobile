@@ -18,7 +18,8 @@ export default class Questions extends Component {
     super(props);
     this.state = {
       questions: [
-        {title: 'What is threading and how do we use it in computer science?',
+        {title: this.props.question.text, //need to inser the dynamic loading options here
+
         A:'It is designed by a Germany scientist',
         B:'It is just an imaginary concept which sounds cool',
         C:'The threading is things going on at the same time',
@@ -32,18 +33,8 @@ export default class Questions extends Component {
     this.props.navigator.pop();
   }
 
-  //replace the function that finds corresponding questions
-
-  // componentDidMount() {
-  //   console.log("Hey what's up");
-  //   Api.server.find('course')
-  //   .then((courses) => {
-  //     console.log("courses", courses);
-  //     this.setState({courses: courses});
-  //   });
-  // }
-
   goToAnswers(course) {
+    // console.log(this.props.question);
     this.props.navigator.push({
       //parse in the unique quiz id here.
       //dynamic generaiton of the questins needed.
@@ -57,7 +48,7 @@ export default class Questions extends Component {
       console.log("+++++++++++++++++", question.title);
       return (
         <View>
-          <Text>Question</Text>
+          <Text style={[styles.questionHeader]}>Question</Text>
           <TextWell
             text={question.title}
             color="red"
@@ -105,12 +96,12 @@ export default class Questions extends Component {
 
   renderCourses() {
     return this.state.questions.map((question, i) => {
-      console.log("+++++++++++++++++", question.title);
+      console.log("+++++++++++++++++", question.text);
       return (
           <CourseRow
             key={i}
             course={course}
-            goToCourse={this.goToCourse.bind(this)}
+            goTo={this.goToCourse.bind(this)}
           />
       );
     });
@@ -122,14 +113,12 @@ export default class Questions extends Component {
         {this.renderNavBar()}
         {this.renderTextWells()}
 
-
         <TouchableHighlight
           style={[styles.button, {marginTop: 20}]}
           onPress={this.goToAnswers.bind(this)}
         >
           <Text>Click me to See the Answer</Text>
         </TouchableHighlight>
-
 
       </View>
     );
@@ -149,5 +138,9 @@ const styles = StyleSheet.create({
   textWellSpacing: {
     marginHorizontal: 10,
     marginBottom: 10
+  },
+  questionHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });

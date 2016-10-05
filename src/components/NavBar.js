@@ -28,134 +28,133 @@ export default class NavBar extends Component {
 
    }
    componentWillUnmount() {
-    PushNotificationIOS.removeEventListener('register', this._onRegistered);
-    //PushNotificationIOS.removeEventListener('registrationError', this._onRegistrationError);
-    PushNotificationIOS.removeEventListener('notification', this._onRemoteNotification);
-    PushNotificationIOS.removeEventListener('localNotification', this._onLocalNotification);
-  }
-  testPush(){
-     console.log("test push");
-     this._sendNotification();
+      PushNotificationIOS.removeEventListener('register', this._onRegistered);
+      //PushNotificationIOS.removeEventListener('registrationError', this._onRegistrationError);
+      PushNotificationIOS.removeEventListener('notification', this._onRemoteNotification);
+      PushNotificationIOS.removeEventListener('localNotification', this._onLocalNotification);
+   }
+   testPush(){
+      console.log("test push");
+      this._sendNotification();
 
-     PushNotificationIOS.addEventListener('register', function(token){
-        // console.log("hey");
-        console.log('You are registered and the device token is: ',token)
-     });
-
-     PushNotificationIOS.addEventListener('notification', function(notification){
-       console.log('You have received a new notification!', notification);
+      PushNotificationIOS.addEventListener('register', function(token){
+         // console.log("hey");
+         console.log('You are registered and the device token is: ',token)
       });
-      //this._showPermissions(); 
- }
-  _sendNotification() {
-    //this._showPermissions();
-    require('RCTDeviceEventEmitter').emit('remoteNotificationReceived', {
-      aps: {
-        alert: 'Sample notification',
-        badge: '+1',
-        sound: 'default',
-        category: 'REACT_NATIVE'
-      },
-    });
-  }
-  _sendLocalNotification() {
-     require('RCTDeviceEventEmitter').emit('localNotificationReceived', {
-       aps: {
-         alert: 'Sample local notification',
-         badge: '+1',
-         sound: 'default',
-         category: 'REACT_NATIVE'
-       },
-     });
+
+      PushNotificationIOS.addEventListener('notification', function(notification){
+         console.log('You have received a new notification!', notification);
+      });
+      //this._showPermissions();
+   }
+   _sendNotification() {
+      //this._showPermissions();
+      require('RCTDeviceEventEmitter').emit('remoteNotificationReceived', {
+         aps: {
+            alert: 'Sample notification',
+            badge: '+1',
+            sound: 'default',
+            category: 'REACT_NATIVE'
+         },
+      });
+   }
+   _sendLocalNotification() {
+      require('RCTDeviceEventEmitter').emit('localNotificationReceived', {
+         aps: {
+            alert: 'Sample local notification',
+            badge: '+1',
+            sound: 'default',
+            category: 'REACT_NATIVE'
+         },
+      });
    }
    _onRegistered(deviceToken) {
-    AlertIOS.alert(
-      'Registered For Remote Push',
-      `Device Token: ${deviceToken}`,
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
-  }
-
-  _onRegistrationError(error) {
-    AlertIOS.alert(
-      'Failed To Register For Remote Push',
-      `Error (${error.code}): ${error.message}`,
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
-  }
-
-  _onRemoteNotification(notification) {
-    AlertIOS.alert(
-      'Quiz Alert',
-      'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
-      [{
-        text: 'Take Quiz',
-        onPress: null,
-      }]
-    );
-  }
-
-  _onLocalNotification(notification){
-    AlertIOS.alert(
-      'Local Notification Received',
-      'Alert message: ' + notification.getMessage(),
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
-  }
-  _showPermissions() {
-     console.log("working...");
-     PushNotificationIOS.checkPermissions((permissions) => {
-       this.setState({permissions});
-     });
-   }
-
-
-   render(){
-      var pr = this.props;
-      var st = this.state;
-      var rightButtonConfig = {
-         title: '=',
-         tintColor: 'white',
-         handler: this.testPush.bind(this),//() => alert('Coming soon..'),
-      };
-      var leftButtonConfig = {
-         title: 'Back',
-         tintColor: 'white',
-         handler: pr.back,
-      };
-
-      var titleConfig = {
-         title: pr.title,
-         tintColor: 'white'
-      };
-      var statusBarConfig = {
-         style: 'light-content',
-         hidden: false,
-         tintColor: '#32D7EF',
-         showAnimation: 'slide',
-         hideAnimation: 'slide'
-      };
-      return(
-         <View style={styles.container}>
-            <NavigationBar
-               style={styles.navBar}
-               title={titleConfig}
-               statusBar={statusBarConfig}
-               rightButton={rightButtonConfig}
-               leftButton={leftButtonConfig}
-            />
-         </View>
+      AlertIOS.alert(
+         'Registered For Remote Push',
+         `Device Token: ${deviceToken}`,
+         [{
+            text: 'Dismiss',
+            onPress: null,
+         }]
       );
    }
+
+   _onRegistrationError(error) {
+      AlertIOS.alert(
+         'Failed To Register For Remote Push',
+         `Error (${error.code}): ${error.message}`,
+         [{
+            text: 'Dismiss',
+            onPress: null,
+         }]
+      );
+   }
+
+   _onRemoteNotification(notification) {
+      AlertIOS.alert(
+         'Quiz Alert',
+         'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
+         [{
+            text: 'Take Quiz',
+            onPress: null,
+         }]
+      );
+   }
+
+   _onLocalNotification(notification){
+      AlertIOS.alert(
+         'Local Notification Received',
+         'Alert message: ' + notification.getMessage(),
+         [{
+            text: 'Dismiss',
+            onPress: null,
+         }]
+      );
+   }
+   _showPermissions() {
+      console.log("working...");
+      PushNotificationIOS.checkPermissions((permissions) => {
+         this.setState({permissions});
+      });
+   }
+
+render(){
+   var pr = this.props;
+   var st = this.state;
+   var rightButtonConfig = {
+      title: '=',
+      tintColor: 'white',
+      handler: this.testPush.bind(this),//() => alert('Coming soon..'),
+   };
+   var leftButtonConfig = {
+      title: 'Back',
+      tintColor: 'white',
+      handler: pr.back,
+   };
+
+   var titleConfig = {
+      title: pr.title,
+      tintColor: 'white'
+   };
+   var statusBarConfig = {
+      style: 'light-content',
+      hidden: false,
+      tintColor: '#32D7EF',
+      showAnimation: 'slide',
+      hideAnimation: 'slide'
+   };
+   return(
+      <View style={styles.container}>
+      <NavigationBar
+      style={styles.navBar}
+      title={titleConfig}
+      statusBar={statusBarConfig}
+      rightButton={rightButtonConfig}
+      leftButton={leftButtonConfig}
+      />
+      </View>
+   );
+}
 }
 
 const styles = StyleSheet.create({

@@ -44,6 +44,7 @@ export default class Entrance extends Component {
     //   this.signIn();
     // }
   }
+
   _showPermissions() {
      console.log("Checking Perms...");
 
@@ -51,8 +52,9 @@ export default class Entrance extends Component {
        this.setState({permissions});
        console.log('Perms: ', JSON.stringify(this.state.permissions));
     });
-
    }
+
+
   signUp() {
     var st = this.state;
     var user = {
@@ -69,7 +71,6 @@ export default class Entrance extends Component {
 
   signIn() {
     var st = this.state;
-    console.log("working...");
 
     var user = {
       email: st.email,
@@ -88,7 +89,7 @@ export default class Entrance extends Component {
       // console.log("hey");
       console.log('You are registered and the device token is: ',token)
     });
-    
+
     this.props.navigator.push({
       name: 'Courses',
       passProps: props
