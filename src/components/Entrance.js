@@ -50,7 +50,8 @@ export default class Entrance extends Component {
      PushNotificationIOS.checkPermissions((permissions) => {
        this.setState({permissions});
        console.log('Perms: ', JSON.stringify(this.state.permissions));
-     });
+    });
+
    }
   signUp() {
     var st = this.state;
@@ -82,6 +83,12 @@ export default class Entrance extends Component {
 
   goToCourses(props) {
     this._showPermissions();
+
+    PushNotificationIOS.addEventListener('register', function(token){
+      // console.log("hey");
+      console.log('You are registered and the device token is: ',token)
+    });
+    
     this.props.navigator.push({
       name: 'Courses',
       passProps: props

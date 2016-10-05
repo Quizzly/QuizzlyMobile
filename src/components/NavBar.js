@@ -36,14 +36,16 @@ export default class NavBar extends Component {
   testPush(){
      console.log("test push");
      this._sendNotification();
+
      PushNotificationIOS.addEventListener('register', function(token){
-        console.log("hey");
+        // console.log("hey");
         console.log('You are registered and the device token is: ',token)
      });
 
      PushNotificationIOS.addEventListener('notification', function(notification){
        console.log('You have received a new notification!', notification);
       });
+      //this._showPermissions(); 
  }
   _sendNotification() {
     //this._showPermissions();
