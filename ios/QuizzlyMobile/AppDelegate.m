@@ -32,18 +32,22 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  
+  //[[UIApplication sharedApplication] registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeSound];
+  
   return YES;
 }
 
 // Required to register for notifications
    - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
    {
-     NSLog(@"Obj code");
     [RCTPushNotificationManager didRegisterUserNotificationSettings:notificationSettings];
+     
    }
    // Required for the register event.
    - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
    {
+    NSLog(@"!!!!Device Token ID:  %@", deviceToken);
     [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
    }
    // Required for the registrationError event.
@@ -61,5 +65,7 @@
    {
     [RCTPushNotificationManager didReceiveLocalNotification:notification];
    }
+
+
 
 @end

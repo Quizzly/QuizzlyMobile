@@ -13,4 +13,6 @@
 
 @property (nonatomic, strong) UIWindow *window;
 
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
+
 @end

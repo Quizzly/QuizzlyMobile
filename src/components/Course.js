@@ -28,10 +28,12 @@ export default class Course extends Component {
          text: 'Waiting on Question'
 
       };
-      this.props.navigator.push({
-         name: 'Questions',
-         passProps: {course: this.props.course, title:this.props.course.title, state:this.state, question}
-      });
+      this.props.testPush();
+      //this.props._sendNotification();
+      // this.props.navigator.push({
+      //    name: 'Questions',
+      //    passProps: {course: this.props.course, title:this.props.course.title, state:this.state, question}
+      // });
       //Need to get access quiz socket ??
    }
 

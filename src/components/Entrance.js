@@ -5,14 +5,13 @@ import {
   TouchableHighlight,
   StyleSheet,
   TextInput,
-  Image, PushNotificationIOS,
+  Image
 } from 'react-native';
 
 import s from '../modules/Style.js';
 import Objects from '../modules/Objects.js';
 import Api from '../modules/Api.js';
 import HorizontalLine from '../elements/HorizontalLine';
-
 import LinearGradient from 'react-native-linear-gradient';
 
 export default class Entrance extends Component {
@@ -23,8 +22,7 @@ export default class Entrance extends Component {
       password: '',
       firstName: '',
       lastName: '',
-      isSignUp: false,
-      permissions: null
+      isSignUp: false
     };
   }
 
@@ -44,16 +42,6 @@ export default class Entrance extends Component {
     //   this.signIn();
     // }
   }
-
-  _showPermissions() {
-     console.log("Checking Perms...");
-
-     PushNotificationIOS.checkPermissions((permissions) => {
-       this.setState({permissions});
-       console.log('Perms: ', JSON.stringify(this.state.permissions));
-    });
-   }
-
 
   signUp() {
     var st = this.state;
@@ -83,13 +71,8 @@ export default class Entrance extends Component {
   }
 
   goToCourses(props) {
-    this._showPermissions();
 
-    PushNotificationIOS.addEventListener('register', function(token){
-      // console.log("hey");
-      console.log('You are registered and the device token is: ',token)
-    });
-
+    console.log("<<<<<<<< device ID: ", this.props.deviceID);
     this.props.navigator.push({
       name: 'Courses',
       passProps: props
