@@ -33,14 +33,13 @@ export default class App extends React.Component {
   }
   componentDidMount(){
 
-
-    // PushNotificationIOS.addEventListener('registrationError', this._onRegistrationError);
+    //PushNotificationIOS.addEventListener('registrationError', this._onRegistrationError);
     PushNotificationIOS.addEventListener('notification', this._onRemoteNotification);
     PushNotificationIOS.addEventListener('register', this._onRegistered);
     PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification);
     PushNotificationIOS.requestPermissions();
     this._showPermissions();
-    
+
   }
   componentWillUnmount() {
     PushNotificationIOS.removeEventListener('register', this._onRegistered);
@@ -61,6 +60,8 @@ export default class App extends React.Component {
   testPush(){
     console.log("test push");
     this._sendNotification();
+
+
   }
   _sendNotification() {
     require('RCTDeviceEventEmitter').emit('remoteNotificationReceived', {
@@ -110,10 +111,13 @@ export default class App extends React.Component {
       'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
       [{
         text: 'Take Quiz',
-        onPress: null,
+        onPress: function(){
+           console.log("take me to quiz");
+        },
       }]
     );
   }
+  
   _onLocalNotification(notification){
     AlertIOS.alert(
       'Local Notification Received',

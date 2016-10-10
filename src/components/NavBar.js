@@ -55,16 +55,6 @@ export default class NavBar extends Component {
       },
      });
    }
-   _onRemoteNotification(notification) {
-     AlertIOS.alert(
-      'Quiz Alert',
-      'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
-      [{
-         text: 'Take Quiz',
-         onPress: null,
-      }]
-     );
-   }
 
    render(){
       var pr = this.props;
