@@ -21,10 +21,10 @@ export default class Course extends Component {
    }
    takeQuiz(){
       console.log("Take quiz...");
-      this.props.navigator.push({
-        name: 'Questions',
-        passProps: {course: this.props.course, title:this.props.course.title, state:this.state}
-      });
+      // this.props.navigator.push({
+      //   name: 'Questions',
+      //   passProps: {course: this.props.course, title:this.props.course.title, state:this.state}
+      // });
       //Need to get access quiz socket ??
    }
 

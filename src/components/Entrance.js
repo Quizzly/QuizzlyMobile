@@ -6,13 +6,13 @@ import {
   StyleSheet,
   TextInput,
   Image,
+  AsyncStorage
 } from 'react-native';
 
 import s from '../modules/Style.js';
 import Objects from '../modules/Objects.js';
 import Api from '../modules/Api.js';
 import HorizontalLine from '../elements/HorizontalLine';
-
 import LinearGradient from 'react-native-linear-gradient';
 
 export default class Entrance extends Component {
@@ -62,12 +62,33 @@ export default class Entrance extends Component {
     var st = this.state;
     var user = {
       email: st.email,
-      password: st.password,
+      password: st.password
     };
-    Api.server.post('login', user)
-    .then((user) => {
-      this.goToCourses(user);
-    });
+    console.log("here at before the API Login ");
+    console.log("st.email", st.email);
+    console.log("st.password",st.password);
+
+    Api.server.post('login',user)
+    .then((loginResponse)=>{
+      console.log("loginResponse.token", loginResponse.jwt);
+      AsyncStorage.setItem('token',JSON.stringify(loginResponse));
+      //Prep for storing the user object to the AsyncStorage
+      // AsyncStorage.setItem('user',JSON.stringify(user));
+      console.log("after set up loginResponse.token", loginResponse.jwt);
+      if(loginResponse.jwt == undefined){
+        //update the front end GUI to show that user doesn't exist
+        console.log("The user info isn't correct");
+      }else{
+        console.log("Right before the goToCourses");
+        // this.goToCourses(user);
+        this.enterQuizzly();
+      }
+
+    })
+
+    //if authentificated, go to the courselist page
+
+    // return this.fetchPost(this.baseUrl + model + findUrl, data);
   }
 
   goToCourses(props) {
@@ -153,7 +174,7 @@ export default class Entrance extends Component {
         {st.isSignUp ? this.renderSignUpInputs() : null}
 
         <TouchableHighlight
-          onPress={this.enterQuizzly.bind(this)}
+          onPress={this.signIn.bind(this)}
         >
           <Text style={styles.boldButtonText}>{st.isSignUp ? "SIGN UP" : "SIGN IN"}</Text>
         </TouchableHighlight>
