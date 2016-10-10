@@ -35,13 +35,12 @@ export default class Entrance extends Component {
  }
 
   enterQuizzly() {
-    this.goToCourses(this.state);
     // TODO: must add this back in
-    // if(this.state.isSignUp) {
-    //   this.signUp();
-    // } else {
-    //   this.signIn();
-    // }
+    if(this.state.isSignUp) {
+      this.signUp();
+    } else {
+      this.signIn();
+    }
   }
 
   signUp() {
@@ -64,9 +63,9 @@ export default class Entrance extends Component {
       email: st.email,
       password: st.password
     };
-    console.log("here at before the API Login ");
-    console.log("st.email", st.email);
-    console.log("st.password",st.password);
+    // console.log("here at before the API Login ");
+    // console.log("st.email", st.email);
+    // console.log("st.password",st.password);
 
     Api.server.post('login',user)
     .then((loginResponse)=>{
@@ -80,8 +79,8 @@ export default class Entrance extends Component {
         console.log("The user info isn't correct");
       }else{
         console.log("Right before the goToCourses");
+        this.goToCourses(this.state);
         // this.goToCourses(user);
-        this.enterQuizzly();
       }
 
     })
@@ -174,7 +173,7 @@ export default class Entrance extends Component {
         {st.isSignUp ? this.renderSignUpInputs() : null}
 
         <TouchableHighlight
-          onPress={this.signIn.bind(this)}
+          onPress={this.enterQuizzly.bind(this)}
         >
           <Text style={styles.boldButtonText}>{st.isSignUp ? "SIGN UP" : "SIGN IN"}</Text>
         </TouchableHighlight>
@@ -186,6 +185,7 @@ export default class Entrance extends Component {
           >
             <Text style={[s.p, s.underline, {color: s.white}]}>{st.isSignUp ? "sign in" : "sign up"}</Text>
           </TouchableHighlight>
+
         </View>
         <Text style={[s.p, s.underline, styles.bottomInfoContainer, {color: s.white}]}>About</Text>
       </LinearGradient>
