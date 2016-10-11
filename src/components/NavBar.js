@@ -19,31 +19,8 @@ export default class NavBar extends Component {
 
       };
    }
-   componentDidMount(){
 
-   }
-   componentWillUnmount() {
-
-   }
-
-   testPush(){
-      console.log("TestPush");
-      this._sendNotification();
-   }
-
-   _onRegistered(deviceToken) {
-     console.log("<<<<<<<<>>>>>>><<<>>><><><><>", deviceToken);
-     this.state.deviceID = 78838383;
-     AlertIOS.alert(
-       'Registered For Remote Push',
-       `Device Token: ${deviceToken}`,
-       [{
-         text: 'Dismiss',
-         onPress: null,
-       }]
-     );
-   }
-
+   testPush() { this._sendNotification(); }
 
    _sendNotification() {
      require('RCTDeviceEventEmitter').emit('remoteNotificationReceived', {

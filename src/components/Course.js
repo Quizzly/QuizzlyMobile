@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import {
    Text,
    View,
-   StyleSheet, TouchableHighlight
+   Navigator,
+   StyleSheet,
+   TouchableHighlight
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -20,22 +22,20 @@ export default class Course extends Component {
       this.props.navigator.pop();
    }
 
-
-
    takeQuiz(){
       console.log("Take quiz...");
       var question = {
-         text: 'Waiting on Question'
+         text: 'Question of the Day'
 
       };
-      //this.props.testPush();
-      //this.props._sendNotification();
+
       this.props.navigator.push({
          name: 'Questions',
          passProps: {course: this.props.course, title:this.props.course.title, state:this.state, question}
       });
       //Need to get access quiz socket ??
    }
+
 
    viewScores(){
       console.log("View Scores...");

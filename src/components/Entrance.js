@@ -5,7 +5,8 @@ import {
   TouchableHighlight,
   StyleSheet,
   TextInput,
-  Image
+  Image,
+  AsyncStorage
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -34,13 +35,12 @@ export default class Entrance extends Component {
  }
 
   enterQuizzly() {
-    this.goToCourses(this.state);
     // TODO: must add this back in
-    // if(this.state.isSignUp) {
-    //   this.signUp();
-    // } else {
-    //   this.signIn();
-    // }
+    if(this.state.isSignUp) {
+      this.signUp();
+    } else {
+      this.signIn();
+    }
   }
 
   signUp() {
@@ -62,12 +62,33 @@ export default class Entrance extends Component {
 
     var user = {
       email: st.email,
-      password: st.password,
+      password: st.password
     };
-    Api.server.post('login', user)
-    .then((user) => {
-      this.goToCourses(user);
-    });
+    // console.log("here at before the API Login ");
+    // console.log("st.email", st.email);
+    // console.log("st.password",st.password);
+
+    Api.server.post('login',user)
+    .then((loginResponse)=>{
+      console.log("loginResponse.token", loginResponse.jwt);
+      AsyncStorage.setItem('token',JSON.stringify(loginResponse));
+      //Prep for storing the user object to the AsyncStorage
+      // AsyncStorage.setItem('user',JSON.stringify(user));
+      console.log("after set up loginResponse.token", loginResponse.jwt);
+      if(loginResponse.jwt == undefined){
+        //update the front end GUI to show that user doesn't exist
+        console.log("The user info isn't correct");
+      }else{
+        console.log("Right before the goToCourses");
+        this.goToCourses(this.state);
+        // this.goToCourses(user);
+      }
+
+    })
+
+    //if authentificated, go to the courselist page
+
+    // return this.fetchPost(this.baseUrl + model + findUrl, data);
   }
 
   goToCourses(props) {
@@ -167,6 +188,7 @@ export default class Entrance extends Component {
           >
             <Text style={[s.p, s.underline, {color: s.white}]}>{st.isSignUp ? "sign in" : "sign up"}</Text>
           </TouchableHighlight>
+
         </View>
         <Text style={[s.p, s.underline, styles.bottomInfoContainer, {color: s.white}]}>About</Text>
       </LinearGradient>

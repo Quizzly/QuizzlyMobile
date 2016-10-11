@@ -27,15 +27,15 @@ export default class App extends React.Component {
     super(props);
 
     this.state = {
-      deviceID: 0,
+      deviceID: null,
       permissions: null
    };
   }
   componentDidMount(){
 
+    PushNotificationIOS.addEventListener('register', this._onRegistered.bind(this));
     //PushNotificationIOS.addEventListener('registrationError', this._onRegistrationError);
     PushNotificationIOS.addEventListener('notification', this._onRemoteNotification);
-    PushNotificationIOS.addEventListener('register', this._onRegistered);
     PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification);
     PushNotificationIOS.requestPermissions();
     this._showPermissions();
@@ -60,9 +60,8 @@ export default class App extends React.Component {
   testPush(){
     console.log("test push");
     this._sendNotification();
-
-
   }
+
   _sendNotification() {
     require('RCTDeviceEventEmitter').emit('remoteNotificationReceived', {
       aps: {
@@ -73,6 +72,7 @@ export default class App extends React.Component {
       },
     });
   }
+
   _sendLocalNotification() {
     require('RCTDeviceEventEmitter').emit('localNotificationReceived', {
       aps: {
@@ -83,9 +83,12 @@ export default class App extends React.Component {
       },
     });
   }
-  _onRegistered(deviceToken) { // this is never called
-    console.log("<<<<<<<<>>>>>>><<<>>><><><><>", deviceToken);
-    this.state.deviceID = 78838383;
+  _onRegistered(deviceToken) {
+    console.log("OnRegistered_DeviceToken:", deviceToken);
+    this.state.deviceID = deviceToken;
+
+    //Handle creation of new installation{deviceToken, ios, userID}
+
     AlertIOS.alert(
       'Registered For Remote Push',
       `Device Token: ${deviceToken}`,
@@ -112,12 +115,20 @@ export default class App extends React.Component {
       [{
         text: 'Take Quiz',
         onPress: function(){
-           console.log("take me to quiz");
+           console.log("Loading Quiz...");
+
+           var question = {
+             text: 'Test'
+           };
+         //   this.props.navigator.push({
+         //     name: 'Questions',
+         //     passProps: {course: 'this.props.course', title:this.props.course.title, state:this.state, question}
+         //   });
         },
       }]
     );
   }
-  
+
   _onLocalNotification(notification){
     AlertIOS.alert(
       'Local Notification Received',
@@ -129,20 +140,16 @@ export default class App extends React.Component {
     );
   }
 
-  hello() {
-     console.log("hello");
- }
 
   renderScene(route, navigator) {
      var props = {};
-     props._sendNotification = this._sendNotification.bind(this);
      props.testPush = this.testPush.bind(this);
      props.deviceID = this.state.deviceID;
     switch (route.name) {
       case 'Entrance':
         return <Entrance {...props} navigator={navigator} {...route.passProps}  />
       case 'Courses':
-        return <Courses navigator={navigator} {...route.passProps}  />
+        return <Courses {...props} navigator={navigator} {...route.passProps}  />
       case 'Course':
          return <Course {...props} navigator={navigator} {...route.passProps}  />
       case 'Answers':

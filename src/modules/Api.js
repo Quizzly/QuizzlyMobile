@@ -10,8 +10,15 @@
 */
 
 var Url = require("./Url.js");
+// var jwt = persistentStorage['jwt'];
 
 class Route {
+  setJwt(jwt) {
+    this.jwt = jwt;
+
+    //persistentlly store the jwt list and values.
+    // persistentStorage.set('jwt', jwt);
+  }
   constructor(baseUrl) {
     this.baseUrl = `${baseUrl}/`;
   }
@@ -21,6 +28,7 @@ class Route {
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
+        'jwt': this.jwt || ''
       }
     };
     if(arguments.length == 1) {
@@ -88,6 +96,32 @@ class Route {
     // /:model/:id/:association/:fk
     return this.fetchDelete(`${this.baseUrl}${model}/${id}/${association}/${fk}`);
   }
+
+  //CODE THE NEEDS CHANGE
+   logIn(email,pwd) {
+    var findUrl = '/auth/login';
+    //create a json object and store the email and pwd in there.
+    var LoginInfo
+
+    Api.server.post('login',LoginInfo)
+    .then((loginResponse)=>{
+      AsyncStorage.setItem('token',loginResponse.token);
+      dispatch({
+        type:actionTypes.LOGIN_USER
+      })
+      dispatch(registerActions.updateUserInfo(loginResponse.user()))
+      //do something here
+    })
+
+    return this.fetchPost(this.baseUrl + model + findUrl, data);
+  }
+
+  LogOut(){
+    AsyncStorage.removeItem('token')
+    .then(()=>{
+      //naviaget to the entrance page
+    })
+  }
 }
 
 function chooseUrl(routeType) {
@@ -108,6 +142,6 @@ function chooseUrl(routeType) {
 }
 
 var Api = module.exports = {
-  server: new Route(Url.localhost),
+  server: new Route(Url.quizzlyProd),
   // baseUrl: window.location.port == '8081' ? Url.localhost : Url.cornerProd,
 }
