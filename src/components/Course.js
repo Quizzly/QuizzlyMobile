@@ -4,7 +4,7 @@ import {
    View,
    Navigator,
    StyleSheet,
-   TouchableHighlight
+   TouchableHighlight, PushNotificationIOS, AlertIOS
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -21,7 +21,7 @@ export default class Course extends Component {
    back() {
       this.props.navigator.pop();
    }
-
+   
    takeQuiz(){
       console.log("Take quiz...");
       var question = {

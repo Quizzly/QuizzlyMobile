@@ -28,24 +28,23 @@ export default class App extends React.Component {
 
     this.state = {
       deviceID: null,
+      navigator: null,
       permissions: null
    };
   }
   componentDidMount(){
 
     PushNotificationIOS.addEventListener('register', this._onRegistered.bind(this));
-    //PushNotificationIOS.addEventListener('registrationError', this._onRegistrationError);
-    PushNotificationIOS.addEventListener('notification', this._onRemoteNotification);
-    PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification);
+   //  PushNotificationIOS.addEventListener('notificiation', this._onRemoteNotification.bind(this));
+    //PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification.bind(this));
     PushNotificationIOS.requestPermissions();
     this._showPermissions();
 
   }
   componentWillUnmount() {
-    PushNotificationIOS.removeEventListener('register', this._onRegistered);
-    //PushNotificationIOS.removeEventListener('registrationError', this._onRegistrationError);
-    PushNotificationIOS.removeEventListener('notification', this._onRemoteNotification);
-    PushNotificationIOS.removeEventListener('localNotification', this._onLocalNotification);
+    PushNotificationIOS.removeEventListener('register', this._onRegistered.bind(this));
+    //PushNotificationIOS.removeEventListener('notification', this._onRemoteNotification.bind(this));
+    //PushNotificationIOS.removeEventListener('localNotification', this._onLocalNotification.bind(this));
   }
   _showPermissions() {
      console.log("Checking Perms...");
@@ -83,20 +82,19 @@ export default class App extends React.Component {
       },
     });
   }
+  
   _onRegistered(deviceToken) {
     console.log("OnRegistered_DeviceToken:", deviceToken);
     this.state.deviceID = deviceToken;
 
-    //Handle creation of new installation{deviceToken, ios, userID}
+   /*  Handle creation of new installation{deviceToken, ios, userID}
+    var DeviceInfo = require('react-native-device-info');
+    var installation = {
+      deviceToken: deviceToken,
+      os: {DeviceInfo.getModel().contains('iPhone') ? 'ios' : 'null'}
+   };
+   */
 
-    AlertIOS.alert(
-      'Registered For Remote Push',
-      `Device Token: ${deviceToken}`,
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
   }
   _onRegistrationError(error) {
     AlertIOS.alert(
@@ -108,43 +106,12 @@ export default class App extends React.Component {
       }]
     );
   }
-  _onRemoteNotification(notification) {
-    AlertIOS.alert(
-      'Quiz Alert',
-      'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
-      [{
-        text: 'Take Quiz',
-        onPress: function(){
-           console.log("Loading Quiz...");
-
-           var question = {
-             text: 'Test'
-           };
-         //   this.props.navigator.push({
-         //     name: 'Questions',
-         //     passProps: {course: 'this.props.course', title:this.props.course.title, state:this.state, question}
-         //   });
-        },
-      }]
-    );
-  }
-
-  _onLocalNotification(notification){
-    AlertIOS.alert(
-      'Local Notification Received',
-      'Alert message: ' + notification.getMessage(),
-      [{
-        text: 'Dismiss',
-        onPress: null,
-      }]
-    );
-  }
-
 
   renderScene(route, navigator) {
      var props = {};
      props.testPush = this.testPush.bind(this);
      props.deviceID = this.state.deviceID;
+
     switch (route.name) {
       case 'Entrance':
         return <Entrance {...props} navigator={navigator} {...route.passProps}  />
