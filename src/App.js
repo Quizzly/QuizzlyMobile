@@ -82,7 +82,7 @@ export default class App extends React.Component {
       },
     });
   }
-  
+
   _onRegistered(deviceToken) {
     console.log("OnRegistered_DeviceToken:", deviceToken);
     this.state.deviceID = deviceToken;

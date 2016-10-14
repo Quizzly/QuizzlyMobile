@@ -46,41 +46,42 @@ export default class Entrance extends Component {
     AlertIOS.alert(
      'Local Notification Received',
      'Alert message: ' + notification.getMessage(),
-     [{
-        text: 'Dismiss',
-        onPress: function(){
-           var question = {
-             text: 'What is the first rule of fight club?'
-           };
-           pr.navigator.push({
-              name: 'Questions',
-              passProps: {course: 'this.props.course', title:'course title', state:this.state, question}
-           });
-        },
-     }]
+     [
+        { text: 'Take Quiz',  onPress: function takeQuiz() {
+        var question = {
+         text: 'What is the first rule of fight club?'
+        };
+        pr.navigator.push({
+           name: 'Questions',
+           passProps: {state:this.state, notification, question}
+        });
+
+     }},
+      { text: 'Cancel',     }
+     ]
     );
   }
-
+  
   _onRemoteNotification(notification) {
     var pr = this.props;
     var st = this.state;
+
     AlertIOS.alert(
     'Quiz Alert',
     'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
-    [{
-        text: 'Take Quiz',
-        onPress: function(){
-           console.log("!! Loading Quiz...");
+    [
+      { text: 'Take Quiz',  onPress: function takeQuiz() {
+         var question = {
+          text: 'What is the first rule of fight club?'
+         };
+         pr.navigator.push({
+            name: 'Questions',
+            passProps: {state:this.state, notification, question}
+         });
 
-           var question = {
-           text: 'What is the first rule of fight club?'
-           };
-           pr.navigator.push({
-           name: 'Questions',
-           passProps: {course: 'this.props.course', title:'course title', state:st, question}
-           });
-        },
-    }]
+      }},
+      { text: 'Cancel',     }
+    ]
     );
   }
 

@@ -21,11 +21,11 @@ export default class Course extends Component {
    back() {
       this.props.navigator.pop();
    }
-   
+
    takeQuiz(){
       console.log("Take quiz...");
       var question = {
-         text: 'Question of the Day'
+         text: 'What is threading ?'
 
       };
 
