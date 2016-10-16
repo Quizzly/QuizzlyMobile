@@ -16,17 +16,35 @@ import NavBar from './NavBar.js'
 export default class Questions extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      questions: [
-        {title: this.props.question.text, //need to inser the dynamic loading options here
+    var length = this.props.question.answers.length;
 
-        A:'It is designed by a Germany scientist',
-        B:'It is just an imaginary concept which sounds cool',
-        C:'The threading is things going on at the same time',
-        D:'We use it with locks and Vs often and a lot',
-        index:'0'},
-      ]
-    };
+    console.log(length);
+    console.log()
+    if(length==3){
+      this.state = {
+          questions: [
+            {title: this.props.question.text, //need to inser the dynamic loading options here
+
+            A:this.props.question.answers[0].text,
+            B:this.props.question.answers[1].text,
+            C:this.props.question.answers[2].text,
+
+            index:'0'},
+          ]
+        };
+   }else if(length==4){
+     this.state = {
+         questions: [
+           {title: this.props.question.text, //need to inser the dynamic loading options here
+
+           A:this.props.question.answers[0].text,
+           B:this.props.question.answers[1].text,
+           C:this.props.question.answers[2].text,
+           D:this.props.question.answers[3].text,
+           index:'0'},
+         ]
+       };
+   }
   }
 
   back() {
