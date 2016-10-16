@@ -19,6 +19,7 @@ export default class Questions extends Component {
     this.state = {
       questions: [
         {title: this.props.question.text, //need to inser the dynamic loading options here
+
         A:'It is designed by a Germany scientist',
         B:'It is just an imaginary concept which sounds cool',
         C:'The threading is things going on at the same time',
@@ -40,44 +41,67 @@ export default class Questions extends Component {
       name: 'Answers',
     });
   }
+  recordAnswer(){
+     console.log("Answer Recorded");
+  }
 
   renderTextWells() {
 
     return this.state.questions.map((question, i) => {
       console.log("+++++++++++++++++", question.title);
       return (
-        <View>
-          <Text style={[styles.questionHeader]}>Question</Text>
-          <TextWell
-            text={question.title}
-            color="red"
-            style={[styles.textWellSpacing, {marginTop: 10}]}
-          />
-          <Text>A.)</Text>
-          <TextWell
-            text={question.A}
-            color="blue"
-            style={styles.textWellSpacing}
-          />
-          <Text>B.)</Text>
-          <TextWell
-            text={question.B}
-            color="blue"
-            style={styles.textWellSpacing}
-          />
-          <Text>C.)</Text>
-          <TextWell
-            text={question.C}
-            color="blue"
-            style={styles.textWellSpacing}
-          />
-          <Text>D.)</Text>
-          <TextWell
-            text={question.D}
-            color="blue"
-            style={styles.textWellSpacing}
-          />
-        </View>
+         <View>
+            <Text style={[styles.questionHeader]}>Question</Text>
+            <TextWell
+             text={question.title}
+             color="red"
+             style={[styles.textWellSpacing, {marginTop: 10}]}
+           />
+
+           <Text>A.)</Text>
+           <TouchableHighlight
+             style={styles.qButton}
+             onPress={function(){
+                console.log("Answer A recorded.. ");
+             }}
+           >
+             <Text style={styles.buttonText}>{question.A}</Text>
+           </TouchableHighlight>
+
+           <Text>B.)</Text>
+           <TouchableHighlight
+             style={styles.qButton}
+             onPress={function(){
+                console.log("Answer B recorded.. ");
+             }}
+           >
+             <Text style={styles.buttonText}>{question.B}</Text>
+           </TouchableHighlight>
+
+
+           <Text>C.)</Text>
+           <TouchableHighlight
+             style={styles.qButton}
+             onPress={function(){
+                console.log("Answer C recorded.. ");
+             }}
+           >
+             <Text style={styles.buttonText}>{question.C}</Text>
+           </TouchableHighlight>
+
+
+           <Text>C.)</Text>
+           <TouchableHighlight
+             style={styles.qButton}
+             onPress={function(){
+                console.log("Answer D recorded.. ");
+             }}
+           >
+             <Text style={styles.buttonText}>{question.D}</Text>
+           </TouchableHighlight>
+
+         </View>
+
       );
     });
   }
@@ -85,7 +109,7 @@ export default class Questions extends Component {
      return (
         <View>
            <NavBar
-              title="Courses"
+              title="Quiz"
               back={this.back.bind(this)}
               hasBack
            />
@@ -95,7 +119,7 @@ export default class Questions extends Component {
 
   renderCourses() {
     return this.state.questions.map((question, i) => {
-      console.log("+++++++++++++++++", question.title);
+      console.log("+++++++++++++++++", question.text);
       return (
           <CourseRow
             key={i}
@@ -112,14 +136,12 @@ export default class Questions extends Component {
         {this.renderNavBar()}
         {this.renderTextWells()}
 
-
         <TouchableHighlight
           style={[styles.button, {marginTop: 20}]}
           onPress={this.goToAnswers.bind(this)}
         >
           <Text>Click me to See the Answer</Text>
         </TouchableHighlight>
-
 
       </View>
     );
@@ -129,6 +151,21 @@ export default class Questions extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  buttonText:{
+     textAlign: 'center',
+    // fontStyle: 'italic',
+     color: s.black
+ },
+  qButton: {
+     borderRadius:7,
+     borderWidth: .25,
+     width: 350,
+     height: 40,
+     justifyContent:'center',
+     alignSelf:'center',
+     margin: 20,
+     backgroundColor: '#E1FBFF'
   },
   button: {
     padding: 20,

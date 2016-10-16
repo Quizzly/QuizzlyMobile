@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TextInput,
   Image,
-  AsyncStorage
+  AsyncStorage, PushNotificationIOS, AlertIOS
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -19,8 +19,8 @@ export default class Entrance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: '',
-      password: '',
+      email: 'Test1@gmail.com',
+      password: 'test1',
       firstName: '',
       lastName: '',
       isSignUp: false
@@ -30,9 +30,60 @@ export default class Entrance extends Component {
   componentDidMount(){
      Api.server.find("student")
      .then((students) => {
-        this.setState({student: students[0]})
+       this.setState({student: students[0]})
      })
- }
+    PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification.bind(this));
+    PushNotificationIOS.addEventListener('notification', this._onRemoteNotification.bind(this));
+  }
+  componentWillUnmount() {
+    PushNotificationIOS.removeEventListener('localNotification', this._onLocalNotification.bind(this));
+    PushNotificationIOS.removeEventListener('notification', this._onRemoteNotification.bind(this));
+  }
+
+  _onLocalNotification(notification){
+    var pr = this.props;
+    var st = this.state;
+    AlertIOS.alert(
+     'Local Notification Received',
+     'Alert message: ' + notification.getMessage(),
+     [
+        { text: 'Take Quiz',  onPress: function takeQuiz() {
+        var question = {
+         text: 'What is the first rule of fight club?'
+        };
+        pr.navigator.push({
+           name: 'Questions',
+           passProps: {state:this.state, notification, question}
+        });
+
+     }},
+      { text: 'Cancel',     }
+     ]
+    );
+  }
+  
+  _onRemoteNotification(notification) {
+    var pr = this.props;
+    var st = this.state;
+
+    AlertIOS.alert(
+    'Quiz Alert',
+    'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
+    [
+      { text: 'Take Quiz',  onPress: function takeQuiz() {
+         var question = {
+          text: 'What is the first rule of fight club?'
+         };
+         pr.navigator.push({
+            name: 'Questions',
+            passProps: {state:this.state, notification, question}
+         });
+
+      }},
+      { text: 'Cancel',     }
+    ]
+    );
+  }
 
   enterQuizzly() {
     // TODO: must add this back in
@@ -59,6 +110,7 @@ export default class Entrance extends Component {
 
   signIn() {
     var st = this.state;
+
     var user = {
       email: st.email,
       password: st.password
@@ -91,6 +143,8 @@ export default class Entrance extends Component {
   }
 
   goToCourses(props) {
+
+    console.log("<<<<<<<< device ID: ", this.props.deviceID);
     this.props.navigator.push({
       name: 'Courses',
       passProps: props

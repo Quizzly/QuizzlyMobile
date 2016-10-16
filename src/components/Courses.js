@@ -4,7 +4,9 @@ import {
    Text,
    View,
    TouchableHighlight,
-   StyleSheet, TableView, ListView
+   StyleSheet,
+   TableView,
+   ListView
 } from 'react-native';
 
 import TextWell from '../elements/TextWell'
@@ -30,6 +32,7 @@ export default class Entrance extends Component {
    }
 
    componentDidMount() {
+
       console.log("Mounting...");
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
       Api.server.find('course')
@@ -41,6 +44,8 @@ export default class Entrance extends Component {
          });
       });
    }
+
+
 
    goToCourse(course) {
       console.log("course", course);

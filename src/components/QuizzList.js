@@ -60,7 +60,6 @@ export default class Entrance extends Component {
     });
   }
 
-
   renderCourses(rowData) {
     var quiz = rowData;
     console.log(">>>>>>>>>>>> Quiz",quiz);
@@ -80,14 +79,11 @@ export default class Entrance extends Component {
      );
   }
 
-
   render() {
     return (
       <View style={styles.container}>
         {this.renderNavBar()}
         {this.renderTable()}
-
-
       </View>
     );
   }

@@ -1,9 +1,11 @@
 
 import React, { Component } from 'react';
 import {
+   AlertIOS,
    Text,
    View,
-   StyleSheet
+   StyleSheet,
+   PushNotificationIOS, AppState
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -17,16 +19,27 @@ export default class NavBar extends Component {
 
       };
    }
-   componentDidMount(){
 
+   testPush() { this._sendNotification(); }
+
+   _sendNotification() {
+     require('RCTDeviceEventEmitter').emit('remoteNotificationReceived', {
+      aps: {
+         alert: 'Sample notification',
+         badge: '+1',
+         sound: 'default',
+         category: 'REACT_NATIVE'
+      },
+     });
    }
+
    render(){
       var pr = this.props;
       var st = this.state;
       var rightButtonConfig = {
-         title: '=',
+         title: 'Push',
          tintColor: 'white',
-         handler: () => alert('Coming soon..'),
+         handler: this.testPush.bind(this),
       };
       var leftButtonConfig = {
          title: 'Back',
@@ -47,13 +60,13 @@ export default class NavBar extends Component {
       };
       return(
          <View style={styles.container}>
-            <NavigationBar
-               style={styles.navBar}
-               title={titleConfig}
-               statusBar={statusBarConfig}
-               rightButton={rightButtonConfig}
-               leftButton={leftButtonConfig}
-            />
+         <NavigationBar
+         style={styles.navBar}
+         title={titleConfig}
+         statusBar={statusBarConfig}
+         rightButton={rightButtonConfig}
+         leftButton={leftButtonConfig}
+         />
          </View>
       );
    }
