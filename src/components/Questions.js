@@ -4,6 +4,7 @@ import {
   View,
   TouchableHighlight,
   StyleSheet,
+  TextInput,
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -17,34 +18,48 @@ export default class Questions extends Component {
   constructor(props) {
     super(props);
     var length = this.props.question.answers.length;
-
+    var type = this.props.question.type;
     console.log(length);
-    console.log()
-    if(length==3){
+    console.log("TYPE",type);
+
+    if(type=="multipleChoice"){
+      if(length==3){
+        this.state = {
+            questions: [
+              {title: this.props.question.text, //need to inser the dynamic loading options here
+
+              A:this.props.question.answers[0].text,
+              B:this.props.question.answers[1].text,
+              C:this.props.question.answers[2].text,
+              Type:type,
+              index:'0'},
+            ]
+          };
+     }else if(length==4){
+       this.state = {
+           questions: [
+             {title: this.props.question.text, //need to inser the dynamic loading options here
+
+             A:this.props.question.answers[0].text,
+             B:this.props.question.answers[1].text,
+             C:this.props.question.answers[2].text,
+             D:this.props.question.answers[3].text,
+             Type:type,
+             index:'0'},
+           ]
+         };
+     }
+   }else if(type == "freeResponse"){
       this.state = {
-          questions: [
-            {title: this.props.question.text, //need to inser the dynamic loading options here
-
-            A:this.props.question.answers[0].text,
-            B:this.props.question.answers[1].text,
-            C:this.props.question.answers[2].text,
-
-            index:'0'},
-          ]
-        };
-   }else if(length==4){
-     this.state = {
          questions: [
            {title: this.props.question.text, //need to inser the dynamic loading options here
-
-           A:this.props.question.answers[0].text,
-           B:this.props.question.answers[1].text,
-           C:this.props.question.answers[2].text,
-           D:this.props.question.answers[3].text,
+           Type:type,
            index:'0'},
-         ]
+         ],
+         text: 'Please answer the question here'
        };
    }
+
   }
 
   back() {
@@ -52,6 +67,7 @@ export default class Questions extends Component {
   }
 
   goToAnswers(course) {
+    console.log("HERE INSIDE THE GO TO ANSWER PAGE-> inputText  ",this.state.text);
     // console.log(this.props.question);
     this.props.navigator.push({
       //parse in the unique quiz id here.
@@ -63,7 +79,31 @@ export default class Questions extends Component {
      console.log("Answer Recorded");
   }
 
-  renderTextWells() {
+  renderFreeResponseQuestion(){
+    console.log("HERE INSDIE THE renderFreeResponseQuestion");
+    return this.state.questions.map((question, i) => {
+      console.log("+++++++++++++++++", question.title);
+      return (
+         <View>
+            <Text style={[styles.questionHeader]}>Question</Text>
+            <TextWell
+             text={question.title}
+             color="red"
+             style={[styles.textWellSpacing, {marginTop: 10}]}
+           />
+
+           <TextInput
+               style={{height: 120, borderColor: 'gray', borderWidth: 1,margin:10}}
+               multiline = {true}
+               numberOfLines = {4}
+               onChangeText={(text) => this.setState({text})}
+               value={this.state.text}
+          />
+         </View>
+      );
+    });
+  }
+  renderMultipleChoiceQuestion() {
 
     return this.state.questions.map((question, i) => {
       console.log("+++++++++++++++++", question.title);
@@ -149,20 +189,46 @@ export default class Questions extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        {this.renderNavBar()}
-        {this.renderTextWells()}
+    console.log("HERE IS THE RENDER FUNCTION");
+    console.log("QUESTION",this.props.question);
+    var type = this.props.question.type;
 
-        <TouchableHighlight
-          style={[styles.button, {marginTop: 20}]}
-          onPress={this.goToAnswers.bind(this)}
-        >
-          <Text>Click me to See the Answer</Text>
-        </TouchableHighlight>
+    if(type == "multipleChoice"){
+      console.log("THE TYPE IS MULTIPLE CHOICE");
 
-      </View>
-    );
+      return (
+        <View style={styles.container}>
+          {this.renderNavBar()}
+          {this.renderMultipleChoiceQuestion()}
+
+          <TouchableHighlight
+            style={[styles.button, {marginTop: 20}]}
+            onPress={this.goToAnswers.bind(this)}
+          >
+            <Text>Click me to See the Answer</Text>
+          </TouchableHighlight>
+
+        </View>
+      );
+
+    }else if(type == "freeResponse"){
+      console.log("THE TYPE IS FREE RESPONSE");
+      return (
+        <View style={styles.container}>
+          {this.renderNavBar()}
+          {this.renderFreeResponseQuestion()}
+
+          <TouchableHighlight
+            style={[styles.button, {marginTop: 20}]}
+            onPress={this.goToAnswers.bind(this)}
+          >
+            <Text>Click me to See the Answer</Text>
+          </TouchableHighlight>
+
+        </View>
+      );
+    }
+
   }
 }
 
