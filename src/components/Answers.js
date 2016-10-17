@@ -26,12 +26,13 @@ export default class Answers extends Component {
   }
 
   componentDidMount() {
-    console.log("Hey what's up");
-    Api.server.find('course')
-    .then((courses) => {
-      console.log("courses", courses);
-      this.setState({courses: courses});
-    });
+    console.log("Inside the Answer Page: Passing Props",this.props.question);
+    // Api.server.find('course')
+    // .then((courses) => {
+    //   console.log("courses", courses);
+    //   this.setState({courses: courses});
+    // });
+    console.log(this.props.question);
   }
 
   goToCourse(course) {

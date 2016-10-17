@@ -19,15 +19,12 @@ export default class Questions extends Component {
     super(props);
     var length = this.props.question.answers.length;
     var type = this.props.question.type;
-    console.log(length);
-    console.log("TYPE",type);
 
     if(type=="multipleChoice"){
       if(length==3){
         this.state = {
             questions: [
               {title: this.props.question.text, //need to inser the dynamic loading options here
-
               A:this.props.question.answers[0].text,
               B:this.props.question.answers[1].text,
               C:this.props.question.answers[2].text,
@@ -66,13 +63,14 @@ export default class Questions extends Component {
     this.props.navigator.pop();
   }
 
-  goToAnswers(course) {
-    console.log("HERE INSIDE THE GO TO ANSWER PAGE-> inputText  ",this.state.text);
+  goToAnswers(question) {
+    console.log("HERE INSIDE THE GO TO ANSWER PAGE-> inputText  ",question);
     // console.log(this.props.question);
     this.props.navigator.push({
       //parse in the unique quiz id here.
       //dynamic generaiton of the questins needed.
       name: 'Answers',
+      passProps: {question: question}
     });
   }
   recordAnswer(){
@@ -148,7 +146,7 @@ export default class Questions extends Component {
            </TouchableHighlight>
 
 
-           <Text>C.)</Text>
+           <Text>D.)</Text>
            <TouchableHighlight
              style={styles.qButton}
              onPress={function(){
@@ -191,7 +189,8 @@ export default class Questions extends Component {
   render() {
     console.log("HERE IS THE RENDER FUNCTION");
     console.log("QUESTION",this.props.question);
-    var type = this.props.question.type;
+    var pr = this.props;
+    var type = pr.question.type;
 
     if(type == "multipleChoice"){
       console.log("THE TYPE IS MULTIPLE CHOICE");
@@ -203,7 +202,7 @@ export default class Questions extends Component {
 
           <TouchableHighlight
             style={[styles.button, {marginTop: 20}]}
-            onPress={this.goToAnswers.bind(this)}
+            onPress={this.goToAnswers.bind(this,pr.question)}
           >
             <Text>Click me to See the Answer</Text>
           </TouchableHighlight>
@@ -220,7 +219,7 @@ export default class Questions extends Component {
 
           <TouchableHighlight
             style={[styles.button, {marginTop: 20}]}
-            onPress={this.goToAnswers.bind(this)}
+            onPress={this.goToAnswers.bind(this,pr.question)}
           >
             <Text>Click me to See the Answer</Text>
           </TouchableHighlight>
