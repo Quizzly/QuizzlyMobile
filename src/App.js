@@ -29,7 +29,8 @@ export default class App extends React.Component {
     this.state = {
       deviceID: null,
       navigator: null,
-      permissions: null
+      permissions: null,
+      installation: null
    };
   }
   componentDidMount(){
@@ -87,13 +88,16 @@ export default class App extends React.Component {
     console.log("OnRegistered_DeviceToken:", deviceToken);
     this.state.deviceID = deviceToken;
 
-   /*  Handle creation of new installation{deviceToken, ios, userID}
-    var DeviceInfo = require('react-native-device-info');
-    var installation = {
-      deviceToken: deviceToken,
-      os: {DeviceInfo.getModel().contains('iPhone') ? 'ios' : 'null'}
+   // Handle creation of new installation{deviceToken, ios, userID}
+   var DeviceInfo = require('react-native-device-info');
+   var installation = {
+      deviceId: deviceToken,
+      type: DeviceInfo.getManufacturer() == 'Apple' ? 'ios' : 'android'
    };
-   */
+
+   this.setState({installation: installation});
+   
+   console.log('!!Instalation Obj to be saved at signup :', installation);
 
   }
   _onRegistrationError(error) {
@@ -111,6 +115,7 @@ export default class App extends React.Component {
      var props = {};
      props.testPush = this.testPush.bind(this);
      props.deviceID = this.state.deviceID;
+     props.installation = this.state.installation;
 
     switch (route.name) {
       case 'Entrance':

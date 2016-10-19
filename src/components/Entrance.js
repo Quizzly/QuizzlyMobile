@@ -14,15 +14,16 @@ import Objects from '../modules/Objects.js';
 import Api from '../modules/Api.js';
 import HorizontalLine from '../elements/HorizontalLine';
 import LinearGradient from 'react-native-linear-gradient';
+//import CountDown from 'react-native-countdown';
 
 export default class Entrance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'Test1@gmail.com',
-      password: 'test1',
-      firstName: '',
-      lastName: '',
+      email: 'j@gmail.com',
+      password: 'test',
+      firstName: 'Joe',
+      lastName: 'Biden',
       isSignUp: false
     };
   }
@@ -48,20 +49,20 @@ export default class Entrance extends Component {
      'Alert message: ' + notification.getMessage(),
      [
         { text: 'Take Quiz',  onPress: function takeQuiz() {
-        var question = {
-         text: 'What is the first rule of fight club?'
-        };
-        pr.navigator.push({
-           name: 'Questions',
-           passProps: {state:this.state, notification, question}
-        });
-
+           Api.server.post('question/getopenquestion', {questionKey: notification.questionKey})
+           .then((question) => {
+             console.log("question -!!!! ::: ", question);
+             pr.navigator.push({
+                name: 'Questions',
+                passProps: {state:this.state, notification, question}
+             });
+           });
      }},
       { text: 'Cancel',     }
      ]
     );
   }
-  
+
   _onRemoteNotification(notification) {
     var pr = this.props;
     var st = this.state;
@@ -72,8 +73,61 @@ export default class Entrance extends Component {
     [
       { text: 'Take Quiz',  onPress: function takeQuiz() {
          var question = {
-          text: 'What is the first rule of fight club?'
-         };
+             "answers": [
+               {
+                 "option": "A",
+                 "text": "String stuff",
+                 "correct": false,
+                 "question": "57c4d01d21cb2133112c0870",
+                 "createdAt": "2016-08-30T00:15:25.449Z",
+                 "updatedAt": "2016-08-30T00:15:25.449Z",
+                 "id": "57c4d01d21cb2133112c0871"
+               },
+               {
+                 "option": "B",
+                 "text": "Needle through the eye",
+                 "correct": true,
+                 "question": "57c4d01d21cb2133112c0870",
+                 "createdAt": "2016-08-30T00:15:25.450Z",
+                 "updatedAt": "2016-08-30T00:15:25.450Z",
+                 "id": "57c4d01d21cb2133112c0872"
+               },
+               {
+                 "option": "C",
+                 "text": "Masterfully sad",
+                 "correct": false,
+                 "question": "57c4d01d21cb2133112c0870",
+                 "createdAt": "2016-08-30T00:15:25.450Z",
+                 "updatedAt": "2016-08-30T00:15:25.450Z",
+                 "id": "57c4d01d21cb2133112c0873"
+              },
+              {
+                "option": "D",
+                "text": "Random choice",
+                "correct": false,
+                "question": "57c4d01d21cb2133112c0870",
+                "createdAt": "2016-08-30T00:15:25.450Z",
+                "updatedAt": "2016-08-30T00:15:25.450Z",
+                "id": "57c4d01d21cb2133112c0873"
+              }
+             ],
+             "quiz": {
+               "title": "Threading",
+               "course": "57c4cf2821cb2133112c0867",
+               "createdAt": "2016-08-30T00:13:23.793Z",
+               "updatedAt": "2016-08-30T00:15:01.907Z",
+               "id": "57c4cfa321cb2133112c086b"
+             },
+             "text": "What is threading?",
+             "type": "multipleChoice",
+             "duration": 30,
+             "createdAt": "2016-08-30T00:15:25.443Z",
+             "updatedAt": "2016-08-30T00:15:25.445Z",
+             "id": "57c4d01d21cb2133112c0870"
+            };
+         console.log('Notification!!!:::: ', notification);
+         console.log("question -!!!! ::: ", question);
+
          pr.navigator.push({
             name: 'Questions',
             passProps: {state:this.state, notification, question}
@@ -96,30 +150,64 @@ export default class Entrance extends Component {
 
   signUp() {
     var st = this.state;
+    var pr = this.props;
+
+    var DeviceInfo = require('react-native-device-info');
+
+    var mobile = {
+      deviceId: '69',
+      type: DeviceInfo.getManufacturer() == 'Apple' ? 'ios' : 'android'
+    };
+
     var user = {
       email: st.email,
       password: st.password,
       firstName: st.firstName,
-      lastName: st.lastName
+      lastName: st.lastName,
+      mobile: pr.installation
     };
+    console.log('User  :::: ', user);
+
     Api.server.post('signup', user)
-    .then((user) => {
-      this.goToCourses(user);
-    });
+     .then((user) => {
+        Api.server.post('login',user)
+        .then((loginResponse)=>{
+           console.log("loginResponse.token", loginResponse.jwt);
+           AsyncStorage.setItem('token',JSON.stringify(loginResponse));
+           console.log("after set up loginResponse.token", loginResponse.jwt);
+         if(loginResponse.jwt == undefined){
+            console.log("The sign up isn't successful");
+         }else{
+            console.log("Right before the goToCourses");
+            this.goToCourses(this.state); // just for testing
+            // this.goToCourses(user);
+         }
+        })
+     });
+
   }
 
   signIn() {
     var st = this.state;
+    var pr = this.props;
+
+    var DeviceInfo = require('react-native-device-info');
+    console.log('Model :::: ', DeviceInfo.getManufacturer());
+    var mobile = {
+      deviceId: '69',
+      type: DeviceInfo.getManufacturer() == 'Apple' ? 'ios' : 'android'
+    };
 
     var user = {
       email: st.email,
-      password: st.password
+      password: st.password,
+      mobile: pr.installation
     };
     // console.log("here at before the API Login ");
     // console.log("st.email", st.email);
     // console.log("st.password",st.password);
 
-    Api.server.post('login',user)
+    Api.server.post('login', user)
     .then((loginResponse)=>{
       console.log("loginResponse.token", loginResponse.jwt);
       AsyncStorage.setItem('token',JSON.stringify(loginResponse));
@@ -132,7 +220,7 @@ export default class Entrance extends Component {
       }else{
         console.log("Right before the goToCourses");
         this.goToCourses(this.state);
-        // this.goToCourses(user);
+        // this.goToCourses(user);  //just for test
       }
 
     })
@@ -153,6 +241,23 @@ export default class Entrance extends Component {
 
   toggleSignInUp() {
     this.setState({isSignUp: !this.state.isSignUp});
+  }
+
+  startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
   }
 
   renderMainInputs() {
@@ -240,7 +345,17 @@ export default class Entrance extends Component {
             <Text style={[s.p, s.underline, {color: s.white}]}>{st.isSignUp ? "sign in" : "sign up"}</Text>
           </TouchableHighlight>
 
+          {/* <CountDown
+           onPress={this.sendAgain} //default null
+           text={'Try again'} //default ''
+           time={60} //default 60
+           buttonStyle={{padding:20}}
+           textStyle={{color:'black'}} //default black
+           disabledTextStyle={{color:'gray'}} //default gray
+         /> */}
+
         </View>
+
         <Text style={[s.p, s.underline, styles.bottomInfoContainer, {color: s.white}]}>About</Text>
       </LinearGradient>
     );
