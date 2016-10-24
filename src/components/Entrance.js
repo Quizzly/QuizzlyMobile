@@ -168,18 +168,18 @@ export default class Entrance extends Component {
     };
     console.log('User  :::: ', user);
 
-    Api.server.post('signup', signupResponse)
-     .then((user) => {
-       console.log("signupResponse.token", signupResponse.jwt);
-       AsyncStorage.setItem('token',JSON.stringify(signupResponse));
-       console.log("after set up loginResponse.token", signupResponse.jwt);
-     if(signupResponse.jwt == undefined){
-        console.log("The sign up isn't successful");
-     }else{
-        console.log("Right before the goToCourses");
-        this.goToCourses(this.state); // just for testing
-        // this.goToCourses(user);
-     }
+    Api.server.post('signup', user)
+     .then((signupResponse) => {
+         if(!signupResponse || !signupResponse.jwt || !signupResponse.user){
+            console.log("The sign up isn't successful");
+         }else{
+            console.log("Right before the goToCourses");
+            this.goToCourses(this.state); // just for testing
+             console.log("signupResponse.token", signupResponse.jwt);
+             AsyncStorage.setItem('token',JSON.stringify(signupResponse));
+             console.log("after set up loginResponse.token", signupResponse.jwt);
+            this.goToCourses(signupResponse.user);
+         }
      });
 
   }
