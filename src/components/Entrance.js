@@ -173,12 +173,10 @@ export default class Entrance extends Component {
          if(!signupResponse || !signupResponse.jwt || !signupResponse.user){
             console.log("The sign up isn't successful");
          }else{
-            console.log("Right before the goToCourses");
-            this.goToCourses(this.state); // just for testing
              console.log("signupResponse.token", signupResponse.jwt);
              AsyncStorage.setItem('token',JSON.stringify(signupResponse));
-             console.log("after set up loginResponse.token", signupResponse.jwt);
-            this.goToCourses(signupResponse.user);
+             console.log("after set up signupResponse.token", signupResponse.jwt);
+             this.goToCourses(this.state);
          }
      });
 
