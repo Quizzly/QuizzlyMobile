@@ -17,6 +17,7 @@ import NavBar from './NavBar.js'
 export default class Questions extends Component {
   constructor(props) {
     super(props);
+    console.log("!!!PROPS: ", this.props.question);
     var length = this.props.question.answers.length;
     var type = this.props.question.type;
 
