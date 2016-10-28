@@ -77,12 +77,9 @@ export default class Entrance extends Component {
          Api.server.post('question/getopenquestion', {questionKey: notification._data.questionKey})
          .then((data) => {
            console.log("Take Remote question -!!!! ::: ", data);
-         //   var props = {};
-         //   props.question = question;
-
            pr.navigator.push({
-             name: 'Questions',
-             passProps: {state:this.state, question:data.question, time:data.timeRemaining}
+             name: 'AnswerQuestion',
+             passProps: {state:this.state, question:data.question, questionKey:notification._data.questionKey, time:data.timeRemaining}
            });
          });
       }},
