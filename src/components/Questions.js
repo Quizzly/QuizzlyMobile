@@ -22,31 +22,31 @@ export default class Questions extends Component {
     var type = this.props.question.type;
 
     if(type=="multipleChoice"){
-      if(length==3){
-        this.state = {
-            questions: [
-              {title: this.props.question.text, //need to inser the dynamic loading options here
-              A:this.props.question.answers[0].text,
-              B:this.props.question.answers[1].text,
-              C:this.props.question.answers[2].text,
-              Type:type,
-              index:'0'},
-            ]
-          };
-     }else if(length==4){
-       this.state = {
-           questions: [
-             {title: this.props.question.text, //need to inser the dynamic loading options here
-
-             A:this.props.question.answers[0].text,
-             B:this.props.question.answers[1].text,
-             C:this.props.question.answers[2].text,
-             D:this.props.question.answers[3].text,
-             Type:type,
-             index:'0'},
-           ]
-         };
-     }
+    //   if(length==3){
+    //     this.state = {
+    //         questions: [
+    //           {title: this.props.question.text, //need to inser the dynamic loading options here
+    //           A:this.props.question.answers[0].text,
+    //           B:this.props.question.answers[1].text,
+    //           C:this.props.question.answers[2].text,
+    //           Type:type,
+    //           index:'0'},
+    //         ]
+    //       };
+    //  }else if(length==4){
+    //    this.state = {
+    //        questions: [
+    //          {title: this.props.question.text, //need to inser the dynamic loading options here
+     //
+    //          A:this.props.question.answers[0].text,
+    //          B:this.props.question.answers[1].text,
+    //          C:this.props.question.answers[2].text,
+    //          D:this.props.question.answers[3].text,
+    //          Type:type,
+    //          index:'0'},
+    //        ]
+    //      };
+    //  }
    }else if(type == "freeResponse"){
       this.state = {
          questions: [
@@ -100,66 +100,60 @@ export default class Questions extends Component {
       );
     });
   }
+
+  selectAnswer(answer) {
+      //EMPTY FOR NOW
+
+    // const {
+    //   question,
+    //   student,
+    // } = this.props;
+    // Api.server.create('studentanswer', {answer: answer, student: student, quetsion: querstoin})
+  }
+
   renderMultipleChoiceQuestion() {
-
-    return this.state.questions.map((question, i) => {
-      console.log("+++++++++++++++++", question.title);
+    //customize an answer object for component usage purpose
+    const Answer = ({answer, selectAnswer}) => {
       return (
-         <View>
-            <Text style={[styles.questionHeader]}>Question</Text>
-            <TextWell
-             text={question.title}
-             color="red"
-             style={[styles.textWellSpacing, {marginTop: 10}]}
-           />
+        <View onPress={this.selectAnswer.bind(this, answer)}>
+          {answer.option}.) {answer.text}
+        </View>
 
-           <Text>A.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer A recorded.. ");
-             }}
-           >
-             <Text style={styles.buttonText}>{question.A}</Text>
-           </TouchableHighlight>
+        <Text>{answer.option}.)</Text>
+        <TouchableHighlight
+          style={styles.qButton}
+          onPress={function(){
+             console.log("Answer A recorded.. ");
+          }}
+        >
+          <Text style={styles.buttonText}>{answer.text}</Text>
+        </TouchableHighlight>
+      );
+    }
 
-           <Text>B.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer B recorded.. ");
-             }}
-           >
-             <Text style={styles.buttonText}>{question.B}</Text>
-           </TouchableHighlight>
+    return {
+      <View>
+          <Text style={[styles.questionHeader]}>Question</Text>
+          <TextWell
+           text={this.props.question.text}
+           color="red"
+           style={[styles.textWellSpacing, {marginTop: 10}]}
+         />
 
-
-           <Text>C.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer C recorded.. ");
-             }}
-           >
-             <Text style={styles.buttonText}>{question.C}</Text>
-           </TouchableHighlight>
-
-
-           <Text>D.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer D recorded.. ");
-             }}
-           >
-             <Text style={styles.buttonText}>{question.D}</Text>
-           </TouchableHighlight>
-
-         </View>
-
+      this.props.question.answers.map((answer, i) => {
+      return (
+        <Answer
+          answer={answer}
+          selectAnswer={this.selectAnswer.bind(this)}
+        />
       );
     });
+
+     </View>
+    }
   }
+
+
   renderNavBar(){
      return (
         <View>
