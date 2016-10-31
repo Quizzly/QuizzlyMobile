@@ -9,7 +9,7 @@ import {
 import s from '../modules/Style.js';
 import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
-import CourseRow from './CourseRow'
+import QuizzRow from './QuizzRow'
 import Api from '../modules/Api'
 import NavBar from './NavBar.js'
 
@@ -64,8 +64,8 @@ export default class Entrance extends Component {
     var quiz = rowData;
     console.log(">>>>>>>>>>>> Quiz",quiz);
     return (
-      <CourseRow
-          course={quiz}
+      <QuizzRow
+          quiz={quiz}
           goTo={this.goToQuestionsList.bind(this,quiz)}
        />
     );

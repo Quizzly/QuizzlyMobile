@@ -113,6 +113,7 @@ export default class AnswerQuestion extends Component {
                numberOfLines = {4}
                onChangeText={(text) => this.setState({text})}
                value={this.state.text}
+
           />
          </View>
       );
