@@ -14,15 +14,16 @@ import Objects from '../modules/Objects.js';
 import Api from '../modules/Api.js';
 import HorizontalLine from '../elements/HorizontalLine';
 import LinearGradient from 'react-native-linear-gradient';
+//import CountDown from 'react-native-countdown';
 
 export default class Entrance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: 'Test1@gmail.com',
-      password: 'test1',
-      firstName: '',
-      lastName: '',
+      email: 'abc@gmail.com',
+      password: 'test',
+      firstName: 'Joe',
+      lastName: 'Biden',
       isSignUp: false
     };
   }
@@ -47,21 +48,21 @@ export default class Entrance extends Component {
      'Local Notification Received',
      'Alert message: ' + notification.getMessage(),
      [
-        { text: 'Take Quiz',  onPress: function takeQuiz() {
-        var question = {
-         text: 'What is the first rule of fight club?'
-        };
-        pr.navigator.push({
-           name: 'Questions',
-           passProps: {state:this.state, notification, question}
-        });
-
+        { text: 'Take Quiz',  onPress: function takeQuizLocal() {
+           Api.server.post('question/getopenquestion', {questionKey: notification.questionKey})
+           .then((question) => {
+             console.log("Take Local question -!!!! ::: ", question);
+             pr.navigator.push({
+                name: 'Questions',
+                passProps: {state:this.state, notification, question}
+             });
+           });
      }},
       { text: 'Cancel',     }
      ]
     );
   }
-  
+
   _onRemoteNotification(notification) {
     var pr = this.props;
     var st = this.state;
@@ -70,15 +71,17 @@ export default class Entrance extends Component {
     'Quiz Alert',
     'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
     [
-      { text: 'Take Quiz',  onPress: function takeQuiz() {
-         var question = {
-          text: 'What is the first rule of fight club?'
-         };
-         pr.navigator.push({
-            name: 'Questions',
-            passProps: {state:this.state, notification, question}
+      { text: 'Take Quiz',  onPress: function takeQuizRemote() {
+         console.log("Notification KEY  ::: ", notification);
+         console.log("Question KEY  ::: ", notification._data.questionKey);
+         Api.server.post('question/getopenquestion', {questionKey: notification._data.questionKey})
+         .then((data) => {
+           console.log("Take Remote question -!!!! ::: ", data);
+           pr.navigator.push({
+             name: 'AnswerQuestion',
+             passProps: {state:this.state, question:data.question, questionKey:notification._data.questionKey, time:data.timeRemaining}
+           });
          });
-
       }},
       { text: 'Cancel',     }
     ]
@@ -96,30 +99,59 @@ export default class Entrance extends Component {
 
   signUp() {
     var st = this.state;
+    var pr = this.props;
+
+    var DeviceInfo = require('react-native-device-info');
+
+    var mobile = {
+      deviceId: '69',
+      type: DeviceInfo.getManufacturer() == 'Apple' ? 'ios' : 'android'
+    };
+
     var user = {
       email: st.email,
       password: st.password,
       firstName: st.firstName,
-      lastName: st.lastName
+      lastName: st.lastName,
+      mobile: pr.installation
     };
+    console.log('User  :::: ', user);
+
     Api.server.post('signup', user)
-    .then((user) => {
-      this.goToCourses(user);
-    });
+     .then((signupResponse) => {
+         if(!signupResponse || !signupResponse.jwt || !signupResponse.user){
+            console.log("The sign up isn't successful");
+         }else{
+             console.log("signupResponse.token", signupResponse.jwt);
+             AsyncStorage.setItem('token',JSON.stringify(signupResponse));
+             console.log("after set up signupResponse.token", signupResponse.jwt);
+             this.goToCourses(this.state);
+         }
+     });
+
   }
 
   signIn() {
     var st = this.state;
+    var pr = this.props;
+
+    var DeviceInfo = require('react-native-device-info');
+    console.log('Model :::: ', DeviceInfo.getManufacturer());
+    var mobile = {
+      deviceId: '69',
+      type: DeviceInfo.getManufacturer() == 'Apple' ? 'ios' : 'android'
+    };
 
     var user = {
       email: st.email,
-      password: st.password
+      password: st.password,
+      mobile: pr.installation
     };
     // console.log("here at before the API Login ");
     // console.log("st.email", st.email);
     // console.log("st.password",st.password);
 
-    Api.server.post('login',user)
+    Api.server.post('login', user)
     .then((loginResponse)=>{
       console.log("loginResponse.token", loginResponse.jwt);
       AsyncStorage.setItem('token',JSON.stringify(loginResponse));
@@ -132,7 +164,7 @@ export default class Entrance extends Component {
       }else{
         console.log("Right before the goToCourses");
         this.goToCourses(this.state);
-        // this.goToCourses(user);
+        // this.goToCourses(user);  //just for test
       }
 
     })
@@ -153,6 +185,23 @@ export default class Entrance extends Component {
 
   toggleSignInUp() {
     this.setState({isSignUp: !this.state.isSignUp});
+  }
+
+  startTimer(duration, display) {
+    var timer = duration, minutes, seconds;
+    setInterval(function () {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
   }
 
   renderMainInputs() {
@@ -240,7 +289,17 @@ export default class Entrance extends Component {
             <Text style={[s.p, s.underline, {color: s.white}]}>{st.isSignUp ? "sign in" : "sign up"}</Text>
           </TouchableHighlight>
 
+          {/* <CountDown
+           onPress={this.sendAgain} //default null
+           text={'Try again'} //default ''
+           time={60} //default 60
+           buttonStyle={{padding:20}}
+           textStyle={{color:'black'}} //default black
+           disabledTextStyle={{color:'gray'}} //default gray
+         /> */}
+
         </View>
+
         <Text style={[s.p, s.underline, styles.bottomInfoContainer, {color: s.white}]}>About</Text>
       </LinearGradient>
     );

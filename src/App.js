@@ -18,6 +18,7 @@ import Entrance from './components/Entrance';
 import Courses from './components/Courses';
 import Course from './components/Course';
 import Answers from './components/Answers';
+import AnswerQuestion from './components/AnswerQuestion';
 import Questions from './components/Questions';
 import QuestionsList from './components/QuestionsList';
 import QuizzList from './components/QuizzList';
@@ -29,22 +30,23 @@ export default class App extends React.Component {
     this.state = {
       deviceID: null,
       navigator: null,
-      permissions: null
+      permissions: null,
+      installation: null
    };
   }
   componentDidMount(){
 
     PushNotificationIOS.addEventListener('register', this._onRegistered.bind(this));
    //  PushNotificationIOS.addEventListener('notificiation', this._onRemoteNotification.bind(this));
-    //PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification.bind(this));
+   //  PushNotificationIOS.addEventListener('localNotification', this._onLocalNotification.bind(this));
     PushNotificationIOS.requestPermissions();
     this._showPermissions();
 
   }
   componentWillUnmount() {
     PushNotificationIOS.removeEventListener('register', this._onRegistered.bind(this));
-    //PushNotificationIOS.removeEventListener('notification', this._onRemoteNotification.bind(this));
-    //PushNotificationIOS.removeEventListener('localNotification', this._onLocalNotification.bind(this));
+   //  PushNotificationIOS.removeEventListener('notification', this._onRemoteNotification.bind(this));
+   //  PushNotificationIOS.removeEventListener('localNotification', this._onLocalNotification.bind(this));
   }
   _showPermissions() {
      console.log("Checking Perms...");
@@ -87,13 +89,16 @@ export default class App extends React.Component {
     console.log("OnRegistered_DeviceToken:", deviceToken);
     this.state.deviceID = deviceToken;
 
-   /*  Handle creation of new installation{deviceToken, ios, userID}
-    var DeviceInfo = require('react-native-device-info');
-    var installation = {
-      deviceToken: deviceToken,
-      os: {DeviceInfo.getModel().contains('iPhone') ? 'ios' : 'null'}
+   // Handle creation of new installation{deviceToken, ios, userID}
+   var DeviceInfo = require('react-native-device-info');
+   var installation = {
+      deviceId: deviceToken,
+      type: DeviceInfo.getManufacturer() == 'Apple' ? 'ios' : 'android'
    };
-   */
+
+   this.setState({installation: installation});
+
+   console.log('!!Instalation Obj to be saved at signup :', installation);
 
   }
   _onRegistrationError(error) {
@@ -111,6 +116,7 @@ export default class App extends React.Component {
      var props = {};
      props.testPush = this.testPush.bind(this);
      props.deviceID = this.state.deviceID;
+     props.installation = this.state.installation;
 
     switch (route.name) {
       case 'Entrance':
@@ -123,6 +129,8 @@ export default class App extends React.Component {
         return <Answers navigator={navigator} {...route.passProps}  />
       case 'Questions':
         return <Questions navigator={navigator} {...route.passProps}  />
+     case 'AnswerQuestion':
+        return <AnswerQuestion navigator={navigator} {...route.passProps}  />
       case 'QuizzList':
         return <QuizzList navigator={navigator} {...route.passProps}  />
       case 'QuestionsList':

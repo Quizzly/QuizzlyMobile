@@ -16,9 +16,25 @@ import NavBar from './NavBar.js'
 export default class Answers extends Component {
   constructor(props) {
     super(props);
+    var question = this.props.question;
+    var answers = this.props.question.answers;
+
+    //find the solution answer and store it to the state
+    var solu;
+    for(i = 0 ;i < answers.length; i++){
+      if(answers[i].correct){
+        solu = i;
+      }
+    }
+
     this.state = {
-      courses: []
-    };
+        answers:[{
+          question:question.text,
+          option:answers[solu].option,
+          text  :answers[solu].text
+        },
+      ]};
+
   }
 
   back() {
@@ -26,30 +42,24 @@ export default class Answers extends Component {
   }
 
   componentDidMount() {
-    console.log("Hey what's up");
-    Api.server.find('course')
-    .then((courses) => {
-      console.log("courses", courses);
-      this.setState({courses: courses});
-    });
   }
 
   goToCourse(course) {
-    console.log("course", course);
   }
 
   renderTextWells() {
+    var st = this.state.answers[0];
     return (
       <View>
         <Text>3.)</Text>
         <TextWell
-          text="What is threading and how do we use it in computer science?"
+          text={st.question}
           color="green"
           style={[styles.textWellSpacing, {marginTop: 10}]}
         />
-        <Text>D.)</Text>
+        <Text>{st.option}</Text>
         <TextWell
-          text="We use it with locks and Vs often and a lot"
+          text={st.text}
           color="red"
           style={styles.textWellSpacing}
         />

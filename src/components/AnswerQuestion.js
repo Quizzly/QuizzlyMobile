@@ -14,10 +14,12 @@ import CourseRow from './CourseRow'
 import Api from '../modules/Api'
 import NavBar from './NavBar.js'
 
-export default class Questions extends Component {
+export default class AnswerQuestion extends Component {
   constructor(props) {
     super(props);
+
     console.log("!!!PROPS: ", this.props.question);
+
     var length = this.props.question.answers.length;
     var type = this.props.question.type;
 
@@ -37,7 +39,6 @@ export default class Questions extends Component {
        this.state = {
            questions: [
              {title: this.props.question.text, //need to inser the dynamic loading options here
-
              A:this.props.question.answers[0].text,
              B:this.props.question.answers[1].text,
              C:this.props.question.answers[2].text,
@@ -57,7 +58,9 @@ export default class Questions extends Component {
          text: 'Please answer the question here'
        };
    }
+
   }
+
   back() {
     this.props.navigator.pop();
   }
@@ -72,8 +75,23 @@ export default class Questions extends Component {
       passProps: {question: question}
     });
   }
-  recordAnswer(){
-     console.log("Answer Recorded");
+
+  //send to URL: question/answer
+  recordAnswer(answerID){
+
+     var answerObject = {
+        questionKey: this.props.questionKey,
+        answer: answerID
+     };
+     console.log("Answer OBJ:", answerObject);
+
+     Api.server.post("question/answer", answerObject)
+     .then((object) => {
+        console.log("successful post.");
+     });
+
+     this.back(); 
+
   }
 
   renderFreeResponseQuestion(){
@@ -116,9 +134,7 @@ export default class Questions extends Component {
            <Text>A.)</Text>
            <TouchableHighlight
              style={styles.qButton}
-             onPress={function(){
-                console.log("Answer A recorded.. ");
-             }}
+             onPress={this.recordAnswer.bind(this,this.props.question.answers[0].id)}
            >
              <Text style={styles.buttonText}>{question.A}</Text>
            </TouchableHighlight>
@@ -126,9 +142,7 @@ export default class Questions extends Component {
            <Text>B.)</Text>
            <TouchableHighlight
              style={styles.qButton}
-             onPress={function(){
-                console.log("Answer B recorded.. ");
-             }}
+             onPress={this.recordAnswer.bind(this,this.props.question.answers[1].id)}
            >
              <Text style={styles.buttonText}>{question.B}</Text>
            </TouchableHighlight>
@@ -137,23 +151,19 @@ export default class Questions extends Component {
            <Text>C.)</Text>
            <TouchableHighlight
              style={styles.qButton}
-             onPress={function(){
-                console.log("Answer C recorded.. ");
-             }}
+             onPress={this.recordAnswer.bind(this,this.props.question.answers[2].id)}
            >
              <Text style={styles.buttonText}>{question.C}</Text>
            </TouchableHighlight>
 
 
-           <Text>D.)</Text>
+           {/* <Text>D.)</Text>
            <TouchableHighlight
              style={styles.qButton}
-             onPress={function(){
-                console.log("Answer D recorded.. ");
-             }}
+             onPress={this.recordAnswer.bind(this,this.props.question.answers[3].id)}
            >
              <Text style={styles.buttonText}>{question.D}</Text>
-           </TouchableHighlight>
+           </TouchableHighlight> */}
 
          </View>
 
@@ -199,13 +209,6 @@ export default class Questions extends Component {
           {this.renderNavBar()}
           {this.renderMultipleChoiceQuestion()}
 
-          <TouchableHighlight
-            style={[styles.button, {marginTop: 20}]}
-            onPress={this.goToAnswers.bind(this,pr.question)}
-          >
-            <Text>Click me to See the Answer</Text>
-          </TouchableHighlight>
-
         </View>
       );
 
@@ -226,6 +229,7 @@ export default class Questions extends Component {
         </View>
       );
     }
+
   }
 }
 
