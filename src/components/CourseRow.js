@@ -34,9 +34,9 @@ export default class CourseRow extends Component {
           {pr.course.title}
         </Text>
         <View style={styles.endInfoContainer}>
-          <Text style={[s.p, styles.grade]}>
+          {/* <Text style={[s.p, styles.grade]}>
             3 / 77
-          </Text>
+          </Text> */}
           <Text style={styles.arrow}>
             >
           </Text>

@@ -12,6 +12,7 @@ import {
 import s from '../modules/Style.js';
 import Objects from '../modules/Objects.js';
 import Api from '../modules/Api.js';
+import Session from '../modules/Session.js';
 import HorizontalLine from '../elements/HorizontalLine';
 import LinearGradient from 'react-native-linear-gradient';
 //import CountDown from 'react-native-countdown';
@@ -97,6 +98,10 @@ export default class Entrance extends Component {
     }
   }
 
+  setSession(student) {
+     Session.student = student;
+  }
+
   signUp() {
     var st = this.state;
     var pr = this.props;
@@ -124,6 +129,7 @@ export default class Entrance extends Component {
          }else{
              console.log("signupResponse.token", signupResponse.jwt);
              AsyncStorage.setItem('token',JSON.stringify(signupResponse));
+             this.setSession(signupResponse.user);
              console.log("after set up signupResponse.token", signupResponse.jwt);
              this.goToCourses(this.state);
          }
@@ -155,6 +161,7 @@ export default class Entrance extends Component {
     .then((loginResponse)=>{
       console.log("loginResponse.token", loginResponse.jwt);
       AsyncStorage.setItem('token',JSON.stringify(loginResponse));
+      this.setSession(loginResponse.user);
       //Prep for storing the user object to the AsyncStorage
       // AsyncStorage.setItem('user',JSON.stringify(user));
       console.log("after set up loginResponse.token", loginResponse.jwt);
@@ -166,7 +173,6 @@ export default class Entrance extends Component {
         this.goToCourses(this.state);
         // this.goToCourses(user);  //just for test
       }
-
     })
 
     //if authentificated, go to the courselist page
