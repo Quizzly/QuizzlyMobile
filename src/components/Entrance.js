@@ -50,13 +50,63 @@ export default class Entrance extends Component {
      'Alert message: ' + notification.getMessage(),
      [
         { text: 'Take Quiz',  onPress: function takeQuizLocal() {
-           Api.server.post('question/getopenquestion', {questionKey: notification.questionKey})
-           .then((question) => {
-             console.log("Take Local question -!!!! ::: ", question);
-             pr.navigator.push({
-                name: 'Questions',
-                passProps: {state:this.state, notification, question}
-             });
+          var question = {
+             "answers": [
+               {
+                 "option": "A",
+                 "text": "String stuff",
+                 "correct": false,
+                 "question": "57c4d01d21cb2133112c0870",
+                 "createdAt": "2016-08-30T00:15:25.449Z",
+                 "updatedAt": "2016-08-30T00:15:25.449Z",
+                 "id": "57c4d01d21cb2133112c0871"
+               },
+               {
+                 "option": "B",
+                 "text": "Needle through the eye",
+                 "correct": true,
+                 "question": "57c4d01d21cb2133112c0870",
+                 "createdAt": "2016-08-30T00:15:25.450Z",
+                 "updatedAt": "2016-08-30T00:15:25.450Z",
+                 "id": "57c4d01d21cb2133112c0872"
+               },
+               {
+                 "option": "C",
+                 "text": "Masterfully sad",
+                 "correct": false,
+                 "question": "57c4d01d21cb2133112c0870",
+                 "createdAt": "2016-08-30T00:15:25.450Z",
+                 "updatedAt": "2016-08-30T00:15:25.450Z",
+                 "id": "57c4d01d21cb2133112c0873"
+               },
+               {
+                 "option": "D",
+                 "text": "Masterfully sad",
+                 "correct": false,
+                 "question": "57c4d01d21cb2133112c0870",
+                 "createdAt": "2016-08-30T00:15:25.450Z",
+                 "updatedAt": "2016-08-30T00:15:25.450Z",
+                 "id": "57c4d01d21cb2133112c0873"
+               }
+             ],
+             "quiz": {
+               "title": "Threading",
+               "course": "57c4cf2821cb2133112c0867",
+               "createdAt": "2016-08-30T00:13:23.793Z",
+               "updatedAt": "2016-08-30T00:15:01.907Z",
+               "id": "57c4cfa321cb2133112c086b"
+             },
+             "text": "What is threading?",
+             "type": "multipleChoice",
+             "duration": 30,
+             "createdAt": "2016-08-30T00:15:25.443Z",
+             "updatedAt": "2016-08-30T00:15:25.445Z",
+             "id": "57c4d01d21cb2133112c0870"
+          };
+
+           pr.navigator.push({
+             name: 'AnswerQuestion',
+             passProps: {state:this.state, question:question, questionKey:100000, time:30}
            });
      }},
       { text: 'Cancel',     }

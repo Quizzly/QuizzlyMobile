@@ -20,12 +20,12 @@ export default class NavBar extends Component {
       };
    }
 
-   testPush() { this._sendNotification(); }
+   testPush() { this._sendLocalNotification(); }
 
-   _sendNotification() {
-     require('RCTDeviceEventEmitter').emit('remoteNotificationReceived', {
+   _sendLocalNotification() {
+     require('RCTDeviceEventEmitter').emit('localNotificationReceived', {
       aps: {
-         alert: 'Sample notification',
+         alert: 'Sample local notification',
          badge: '+1',
          sound: 'default',
          category: 'REACT_NATIVE'
