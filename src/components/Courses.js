@@ -13,6 +13,7 @@ import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
 import CourseRow from './CourseRow'
 import Api from '../modules/Api'
+import Session from '../modules/Session'
 import s from '../modules/Style.js';
 import LinearGradient from 'react-native-linear-gradient';
 import NavBar from './NavBar.js'
@@ -35,7 +36,9 @@ export default class Entrance extends Component {
 
       console.log("Mounting...");
       var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
-      Api.server.find('course')
+      var courseQuery = {id: Session.student.id};
+      console.log("courseQuery", courseQuery);
+      Api.server.find('student/getStudentCourses', courseQuery)
       .then((courses) => {
          console.log("courses", courses);
          this.setState({
