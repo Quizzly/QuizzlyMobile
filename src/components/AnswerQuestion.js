@@ -59,6 +59,12 @@ export default class AnswerQuestion extends Component {
           me.setState({time: time}, function() {
             if (duration <= 0) {
               clearInterval(counter);
+              if (this.props.question.type == "multipleChoice") {
+                 this.recordMutipleChoiceAnswer(0);
+              }else if (this.props.question.type == "freeResponse"){
+                 this.recordFreeResponseAnswer();
+              }
+              this.back();
               return;
            }
           }.bind(me));
@@ -88,7 +94,7 @@ export default class AnswerQuestion extends Component {
          this.back();
       }
 
-      recordFreeResponseAnswer(answerID){
+      recordFreeResponseAnswer(){
          var answerObject = {
             questionKey: this.props.questionKey,
             text: this.state.text
@@ -210,7 +216,7 @@ export default class AnswerQuestion extends Component {
                   <View style={styles.container}>
                      {this.renderNavBar()}
                      {this.renderMultipleChoiceQuestion()}
-                     <Text style={[styles.button, {marginTop: 20}]}>{this.state.time}</Text>
+                     <Text style={[styles.timer, {marginTop: 20}]}>{this.state.time}</Text>
                   </View>
                );
 
@@ -218,18 +224,9 @@ export default class AnswerQuestion extends Component {
                console.log("THE TYPE IS FREE RESPONSE");
                return (
                   <View style={styles.container}>
-                  {this.renderNavBar()}
-                  {this.renderFreeResponseQuestion()}
-
-                  <Text style={[styles.button, {marginTop: 20}]}>{this.props.time}</Text>
-
-                  <TouchableHighlight
-                  style={[styles.button, {marginTop: 20}]}
-                  onPress={this.goToAnswers.bind(this,pr.question)}
-                  >
-                  <Text>Click me to See the Answer</Text>
-                  </TouchableHighlight>
-
+                     {this.renderNavBar()}
+                     {this.renderFreeResponseQuestion()}
+                     <Text style={[styles.timer, {marginTop: 20}]}>{this.state.time}</Text>
                   </View>
                );
             }
@@ -258,12 +255,16 @@ export default class AnswerQuestion extends Component {
          },
          button: {
             padding: 20,
-            backgroundColor: 'green',
+            backgroundColor: 'yellow',
             alignSelf: 'center',
-            borderRadius: 10
+            borderRadius: 10,
+            borderWidth: .25,
          },
          timer: {
-            marginBottom: 6,
+            padding: 20,
+            alignSelf: 'center',
+            fontSize: 20,
+            fontWeight: 'bold',
          },
          textWellSpacing: {
             marginHorizontal: 10,

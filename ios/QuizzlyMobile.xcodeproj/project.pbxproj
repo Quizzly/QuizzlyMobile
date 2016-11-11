@@ -422,7 +422,7 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = SRQDX8W6Z7;
-						ProvisioningStyle = Manual;
+						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
 								enabled = 1;
@@ -721,7 +721,7 @@
 				CODE_SIGN_ENTITLEMENTS = QuizzlyMobile/QuizzlyMobile.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEAD_CODE_STRIPPING = NO;
-				DEVELOPMENT_TEAM = SRQDX8W6Z7;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -738,8 +738,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.quizzly.mobile;
 				PRODUCT_NAME = QuizzlyMobile;
-				PROVISIONING_PROFILE = "7dd9b365-d049-4f89-a70e-3f91d0c3e04f";
-				PROVISIONING_PROFILE_SPECIFIER = "My Quizzly Dev Push Profile";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -749,7 +749,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = QuizzlyMobile/QuizzlyMobile.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = SRQDX8W6Z7;
+				DEVELOPMENT_TEAM = "";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
@@ -766,8 +766,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.quizzly.mobile;
 				PRODUCT_NAME = QuizzlyMobile;
-				PROVISIONING_PROFILE = "7dd9b365-d049-4f89-a70e-3f91d0c3e04f";
-				PROVISIONING_PROFILE_SPECIFIER = "My Quizzly Dev Push Profile";
+				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
