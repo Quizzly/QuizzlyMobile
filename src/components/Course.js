@@ -62,12 +62,12 @@ export default class Course extends Component {
       return(
          <View>
 
-         <TouchableHighlight
+         {/* <TouchableHighlight
             style={styles.button}
             onPress={this.takeQuiz.bind(this)}
          >
             <Text style={styles.buttonText}>Take Quiz</Text>
-         </TouchableHighlight>
+         </TouchableHighlight> */}
 
          <TouchableHighlight
             style={styles.scoresButton}

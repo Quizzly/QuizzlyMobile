@@ -23,7 +23,7 @@ export default class QuestionRow extends Component {
   }
 
   componentDidMount() {
-    console.log(">>>>>>>>>>>> question", this.props.question);
+    //console.log(">>>>>>>>>>>> question", this.props.question);
   }
 
   renderCourseRowBody() {

@@ -41,7 +41,7 @@ export default class AnswerQuestion extends Component {
          this.startTimer(this.props.time);
       }
       componentWillUnmount(){
-         clearInterval(counter);
+         //clearInterval(counter);
       }
 
       back() {
@@ -59,11 +59,11 @@ export default class AnswerQuestion extends Component {
           me.setState({time: time}, function() {
             if (duration <= 0) {
               clearInterval(counter);
-              if (this.props.question.type == "multipleChoice") {
-                 this.recordMutipleChoiceAnswer(0);
-              }else if (this.props.question.type == "freeResponse"){
-                 this.recordFreeResponseAnswer();
-              }
+            //   if (this.props.question.type == "multipleChoice") {
+            //      this.recordMutipleChoiceAnswer(0);
+            //   }else if (this.props.question.type == "freeResponse"){
+            //      this.recordFreeResponseAnswer();
+            //   }
               this.back();
               return;
            }
@@ -83,27 +83,68 @@ export default class AnswerQuestion extends Component {
       }
 
       recordMutipleChoiceAnswer(answerID){
-         var answerObject = {
-            questionKey: this.props.questionKey,
-            answer: answerID
-         };
-         Api.server.post("question/answer", answerObject)
-         .then((object) => {
-            console.log("successful post.");
-         });
+         var pr = this.props;
+
+         if (typeof pr.quizKey !== 'undefined') {
+            var answerObject = {
+               quizKey: this.props.questionKey,
+               question:this.props.question.id,
+               answer: answerID
+            };
+
+            Api.server.post("quiz/answer", answerObject)
+            .then((object) => {
+               console.log("successful post.");
+            });
+
+         } else if (typeof pr.questionKey !== 'undefined') {
+            var answerObject = {
+               questionKey: this.props.questionKey,
+               answer: answerID
+            };
+
+            Api.server.post("question/answer", answerObject)
+            .then((object) => {
+               console.log("successful post.");
+            });
+
+         } else {
+            console.log("Bad Request");
+         }
+
          this.back();
       }
 
       recordFreeResponseAnswer(){
-         var answerObject = {
-            questionKey: this.props.questionKey,
-            text: this.state.text
-         };
-         console.log("Answer OBJ:", answerObject);
-         Api.server.post("question/answer", answerObject)
-         .then((object) => {
-            console.log("successful post.");
-         });
+         var pr = this.props;
+
+         if (typeof pr.quizKey !== 'undefined') {
+            var answerObject = {
+               quizKey: this.props.questionKey,
+               question:this.props.question.id,
+               text: this.state.text
+            };
+
+            Api.server.post("quiz/answer", answerObject)
+            .then((object) => {
+               console.log("successful post.");
+            });
+
+         } else if (typeof pr.questionKey !== 'undefined') {
+            var answerObject = {
+               questionKey: this.props.questionKey,
+               text: this.state.text
+            };
+
+            Api.server.post("question/answer", answerObject)
+            .then((object) => {
+               console.log("successful post.");
+            });
+
+         } else {
+            console.log("Bad Request");
+         }
+
          this.back();
       }
 

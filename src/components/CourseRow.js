@@ -23,7 +23,7 @@ export default class CourseRow extends Component {
   }
 
   componentDidMount() {
-    console.log(">>>>>>>>>>>> course", this.props.course);
+    //console.log(">>>>>>>>>>>> course", this.props.course);
   }
 
   renderCourseRowBody() {

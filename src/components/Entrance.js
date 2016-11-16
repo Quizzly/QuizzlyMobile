@@ -212,15 +212,30 @@ _onRemoteNotification(notification) {
       [
          { text: 'Take Quiz',  onPress: function takeQuizRemote() {
             console.log("Notification KEY  ::: ", notification);
-            console.log("Question KEY  ::: ", notification._data.questionKey);
-            Api.server.post('question/getopenquestion', {questionKey: notification._data.questionKey})
-            .then((data) => {
-               console.log("Take Remote question -!!!! ::: ", data);
-               pr.navigator.push({
-                  name: 'AnswerQuestion',
-                  passProps: {state:this.state, question:data.question, questionKey:notification._data.questionKey, time:data.timeRemaining}
+
+            if (typeof notification._data.questionKey !== 'undefined') {
+               console.log("Question KEY  ::: ", notification._data.questionKey);
+               Api.server.post('question/getopenquestion', {questionKey: notification._data.questionKey})
+               .then((data) => {
+                  console.log("Take Remote question -!!!! ::: ", data);
+                  pr.navigator.push({
+                     name: 'AnswerQuestion',
+                     passProps: {state:this.state, question:data.question, questionKey:notification._data.questionKey, time:data.timeRemaining}
+                  });
                });
-            });
+            } else if(typeof notification._data.quizKey !== 'undefined') {
+               console.log("Quiz KEY  ::: ", notification._data.quizKey);
+               Api.server.post('quiz/getopenquiz', {quizKey: notification._data.quizKey})
+               .then((data) => {
+                  console.log("Take Remote QUIZ -!!!! ::: ", data);
+                  pr.navigator.push({
+                     name: 'AnswerQuiz',
+                     passProps: {state:this.state, quiz:data.quiz, quizKey:notification._data.quizKey, time:data.timeRemaining}
+                  });
+               });
+            } else {
+               console.log("No Question or Quiz Key was passed with Notification;::: ", notification);
+            }
          }},
          { text: 'Cancel',     }
       ]

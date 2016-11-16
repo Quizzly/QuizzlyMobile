@@ -33,7 +33,7 @@ export default class QuizzRow extends Component {
   }
 
   componentDidMount() {
-    console.log(">>>>>>>>>>>> quiz", this.props.quiz);
+    //console.log(">>>>>>>>>>>> quiz", this.props.quiz);
     this.getRatio();
   }
 

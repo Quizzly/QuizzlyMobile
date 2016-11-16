@@ -19,13 +19,39 @@ export default class Entrance extends Component {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
     this.state = {
       questions: [],
-      dataSource: ds.cloneWithRows(['row1', 'row2'])
+      dataSource: ds.cloneWithRows(['row1', 'row2']),
+      time: this.props.time,
     };
   }
 
-  back() {
+   componentDidMount(){
+     this.startTimer(this.props.time);
+   }
+   componentWillUnmount(){
+     //clearInterval(counter);
+   }
+   back() {
     this.props.navigator.pop();
-  }
+   }
+
+  startTimer(duration) {
+    counter = setInterval(timer, 1000); //1000 will run it every 1 second
+    var me = this;
+    function timer() {
+      duration--;
+      var time = me.state.time;
+      time = duration;
+      console.log("Time: ", time);
+      me.setState({time: time}, function() {
+        if (duration <= 0) {
+          clearInterval(counter);
+          console.log("AHHHHHH");
+          this.back();
+          return;
+      }
+      }.bind(me));
+   }
+ }
 
   componentDidMount() {
     var ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2 });
@@ -52,20 +78,17 @@ export default class Entrance extends Component {
   }
 
   goToQuestions(question) {
-    this.props.navigator.push({
-      //parse in the unique question id here.
-      //dynamic generaiton of the questins needed.
+     var pr = this.props;
+     this.props.navigator.push({
       name: 'AnswerQuestion',
-      passProps: {question: question, questionKey:10000, time:30 }
-      //, {...this.state}
-    });
-
+      passProps: {question:question, quizKey:pr.quizKey, time:question.duration }
+     });
   }
 
 
   renderCourses(rowData) {
     var question = rowData;
-    console.log(">>>>>>>>>>>> Question",question);
+    //console.log(">>>>>>>>>>>> Question",question);
     return (
       <QuestionRow
           question={question}
