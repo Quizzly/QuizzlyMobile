@@ -65,7 +65,6 @@ export default class Entrance extends Component {
             <NavBar
                title="Courses"
                back={this.back.bind(this)}
-               hasBack
             />
          </View>
       );

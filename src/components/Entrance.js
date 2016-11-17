@@ -21,7 +21,7 @@ export default class Entrance extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         email: 'abc@gmail.com',
+         email: 'Kelly@gmail.com',
          password: 'test',
          firstName: 'Joe',
          lastName: 'Biden',

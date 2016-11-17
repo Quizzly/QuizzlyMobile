@@ -65,7 +65,7 @@ export default class NavBar extends Component {
          title={titleConfig}
          statusBar={statusBarConfig}
          rightButton={rightButtonConfig}
-         leftButton={leftButtonConfig}
+         leftButton={this.props.hasBack ? leftButtonConfig : {}}
          />
          </View>
       );

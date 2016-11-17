@@ -62,7 +62,7 @@ export default class Entrance extends Component {
 
   renderCourses(rowData) {
     var quiz = rowData;
-    console.log(">>>>>>>>>>>> Quiz",quiz);
+    //console.log(">>>>>>>>>>>> Quiz",quiz);
     return (
       <CourseRow
           course={quiz}

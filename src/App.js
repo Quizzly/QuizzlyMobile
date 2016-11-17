@@ -18,7 +18,6 @@ import Entrance from './components/Entrance';
 import Courses from './components/Courses';
 import Course from './components/Course';
 import Answers from './components/Answers';
-import AnswerQuestion from './components/AnswerQuestion';
 import AnswerQuiz from './components/AnswerQuiz';
 import Questions from './components/Questions';
 import QuestionsList from './components/QuestionsList';
@@ -130,8 +129,6 @@ export default class App extends React.Component {
         return <Answers navigator={navigator} {...route.passProps}  />
       case 'Questions':
         return <Questions navigator={navigator} {...route.passProps}  />
-     case 'AnswerQuestion':
-        return <AnswerQuestion navigator={navigator} {...route.passProps}  />
      case 'AnswerQuiz':
          return <AnswerQuiz navigator={navigator} {...route.passProps}  />
       case 'QuizzList':

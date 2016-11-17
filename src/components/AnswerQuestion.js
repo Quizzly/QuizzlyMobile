@@ -12,7 +12,6 @@ import TextWell from '../elements/TextWell'
 import Row from '../elements/Row'
 import CourseRow from './CourseRow'
 import Api from '../modules/Api'
-import NavBar from './NavBar.js'
 
 var counter;
 
@@ -32,20 +31,15 @@ export default class AnswerQuestion extends Component {
                index:'0'
             },
          ],
-         time: this.props.time,
          text: 'Please answer the question here'
       };
 
       }
       componentDidMount(){
-         this.startTimer(this.props.time);
+         // this.startTimer(this.props.time);
       }
       componentWillUnmount(){
          //clearInterval(counter);
-      }
-
-      back() {
-         this.props.navigator.pop();
       }
 
       startTimer(duration) {
@@ -71,23 +65,12 @@ export default class AnswerQuestion extends Component {
        }
       }
 
-      goToAnswers(question) {
-         console.log("HERE INSIDE THE GO TO ANSWER PAGE-> inputText  ",question);
-         // console.log(this.props.question);
-         this.props.navigator.push({
-            //parse in the unique quiz id here.
-            //dynamic generaiton of the questins needed.
-            name: 'Answers',
-            passProps: {question: question}
-         });
-      }
-
       recordMutipleChoiceAnswer(answerID){
          var pr = this.props;
 
          if (typeof pr.quizKey !== 'undefined') {
             var answerObject = {
-               quizKey: this.props.questionKey,
+               quizKey: this.props.quizKey,
                question:this.props.question.id,
                answer: answerID
             };
@@ -112,7 +95,7 @@ export default class AnswerQuestion extends Component {
             console.log("Bad Request");
          }
 
-         this.back();
+         this.props.nextQuestion();
       }
 
       recordFreeResponseAnswer(){
@@ -120,7 +103,7 @@ export default class AnswerQuestion extends Component {
 
          if (typeof pr.quizKey !== 'undefined') {
             var answerObject = {
-               quizKey: this.props.questionKey,
+               quizKey: this.props.quizKey,
                question:this.props.question.id,
                text: this.state.text
             };
@@ -145,14 +128,14 @@ export default class AnswerQuestion extends Component {
             console.log("Bad Request");
          }
 
-         this.back();
+         this.props.nextQuestion();
       }
 
       renderFreeResponseQuestion(){
          console.log("HERE INSDIE THE renderFreeResponseQuestion");
          return this.state.questions.map((question, i) => {
             return (
-               <View>
+               <View key={i}>
                   <Text style={[styles.questionHeader]}>Question</Text>
                   <TextWell
                      text={question.title}
@@ -162,10 +145,10 @@ export default class AnswerQuestion extends Component {
 
                   <TextInput
                      style={{height: 120, borderColor: 'gray', borderWidth: 1,margin:10}}
-                     multiline = {true}
                      numberOfLines = {4}
                      onChangeText={(text) => this.setState({text})}
                      value={this.state.text}
+                     multiline
                   />
                   <TouchableHighlight
                      style={[styles.button, {marginTop: 20}]}
@@ -181,8 +164,8 @@ export default class AnswerQuestion extends Component {
       renderMultipleChoiceQuestion() {
           const Answer = ({answer, recordMutipleChoiceAnswer}) => {
             return (
-              <View>
-                 <Text>{answer.option}.</Text>
+              <View style={styles.answer}>
+                 <Text>{answer.option}.)</Text>
                  <TouchableHighlight
                    style={styles.qButton}
                    onPress={this.recordMutipleChoiceAnswer.bind(this,answer.id)}
@@ -206,7 +189,7 @@ export default class AnswerQuestion extends Component {
 
                {this.props.question.answers.map((answer, i) => {
                   return (
-                     <View>
+                     <View key={i} >
                           <Answer
                             answer={answer}
                             recordMutipleChoiceAnswer={this.recordMutipleChoiceAnswer.bind(this)}
@@ -219,31 +202,6 @@ export default class AnswerQuestion extends Component {
 
         }
 
-         renderNavBar(){
-            return (
-               <View>
-               <NavBar
-               title="Quiz"
-               back={this.back.bind(this)}
-               hasBack
-               />
-               </View>
-            );
-         }
-
-         renderCourses() {
-            return this.state.questions.map((question, i) => {
-               console.log("+++++++++++++++++", question.text);
-               return (
-                  <CourseRow
-                  key={i}
-                  course={course}
-                  goTo={this.goToCourse.bind(this)}
-                  />
-               );
-            });
-         }
-
          render() {
             console.log("HERE IS THE RENDER FUNCTION");
             console.log("QUESTION",this.props.question);
@@ -252,12 +210,10 @@ export default class AnswerQuestion extends Component {
 
             if(type == "multipleChoice"){
                console.log("THE TYPE IS MULTIPLE CHOICE");
-
                return (
                   <View style={styles.container}>
-                     {this.renderNavBar()}
                      {this.renderMultipleChoiceQuestion()}
-                     <Text style={[styles.timer, {marginTop: 20}]}>{this.state.time}</Text>
+                     <Text style={[styles.timer, {marginTop: 20}]}>{this.props.time}</Text>
                   </View>
                );
 
@@ -265,9 +221,8 @@ export default class AnswerQuestion extends Component {
                console.log("THE TYPE IS FREE RESPONSE");
                return (
                   <View style={styles.container}>
-                     {this.renderNavBar()}
                      {this.renderFreeResponseQuestion()}
-                     <Text style={[styles.timer, {marginTop: 20}]}>{this.state.time}</Text>
+                     <Text style={[styles.timer, {marginTop: 20}]}>{this.props.time}</Text>
                   </View>
                );
             }
@@ -282,17 +237,18 @@ export default class AnswerQuestion extends Component {
          buttonText:{
             textAlign: 'center',
             // fontStyle: 'italic',
-            color: s.black
+            color: s.black,
          },
          qButton: {
-            borderRadius:7,
+            borderRadius: 7,
             borderWidth: .25,
-            width: 350,
+            width: 250,
             height: 40,
-            justifyContent:'center',
-            alignSelf:'center',
+            justifyContent: 'center',
+            alignSelf: 'center',
             margin: 20,
-            backgroundColor: '#E1FBFF'
+            backgroundColor: '#E1FBFF',
+            alignSelf: 'stretch',
          },
          button: {
             padding: 20,
@@ -315,4 +271,10 @@ export default class AnswerQuestion extends Component {
             fontSize: 20,
             fontWeight: 'bold',
          },
+         answer: {
+            flexDirection:'row',
+            alignItems: 'center',
+            paddingLeft: 10,
+            paddingRight: 10,
+         }
       });
