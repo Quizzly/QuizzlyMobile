@@ -10,9 +10,9 @@ Quizzly is an Mobile App that provides convenience for professor to give out qui
 Stakeholder:Conner Frey
 
 Team:
+Elliscope Fang
 Danny Arellano
 Kevin Chen
-Elliscope Fang
 Keion Anvaripour
 Benny Lau
 
