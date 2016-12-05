@@ -20,6 +20,7 @@ Benny Lau
 Installation
 ------------
 -Need to install React native: https://facebook.github.io/react-native/docs/getting-started.html#content
+
   brew install node
   brew install watchman
   npm install -g react-native-cli
