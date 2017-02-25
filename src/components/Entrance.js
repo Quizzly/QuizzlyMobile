@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
    Text,
    View,
-   TouchableHighlight,
+   TouchableOpacity,
    StyleSheet,
    TextInput,
    Image,
@@ -455,19 +455,19 @@ render() {
       {this.renderMainInputs()}
       {st.isSignUp ? this.renderSignUpInputs() : null}
 
-      <TouchableHighlight
+      <TouchableOpacity
       onPress={this.enterQuizzly.bind(this)}
       >
       <Text style={styles.boldButtonText}>{st.isSignUp ? "SIGN UP" : "SIGN IN"}</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
 
       <View style={styles.infoContainer}>
       <Text style={[s.p, {color: s.white}]}>Or switch to </Text>
-      <TouchableHighlight
+      <TouchableOpacity
       onPress={this.toggleSignInUp.bind(this)}
       >
       <Text style={[s.p, s.underline, {color: s.white}]}>{st.isSignUp ? "sign in" : "sign up"}</Text>
-      </TouchableHighlight>
+      </TouchableOpacity>
 
       {/* <CountDown
          onPress={this.sendAgain} //default null
