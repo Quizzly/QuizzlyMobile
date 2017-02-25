@@ -6,7 +6,8 @@ import {
    TouchableHighlight,
    StyleSheet,
    TableView,
-   ListView
+   ListView,
+   AlertIOS
 } from 'react-native';
 
 import TextWell from '../elements/TextWell'
@@ -40,11 +41,15 @@ export default class Entrance extends Component {
       console.log("courseQuery", courseQuery);
       Api.server.find('student/getStudentCourses', courseQuery)
       .then((courses) => {
-         console.log("courses", courses);
-         this.setState({
-            courses: courses,
-            dataSource: ds.cloneWithRows(courses)
-         });
+        if(courses.length == 0) {
+          AlertIOS.alert (
+            "Not currently enrolled in any courses."
+          );
+        }
+        this.setState({
+          courses: courses,
+          dataSource: ds.cloneWithRows(courses)
+        });
       });
    }
 
@@ -91,6 +96,7 @@ export default class Entrance extends Component {
    render() {
       return (
          <View style={styles.container}>
+
 
           {this.renderNavBar()}
           {this.renderTable()}

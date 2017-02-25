@@ -261,6 +261,7 @@ setSession(student) {
 }
 
 signUp() {
+   console.log("in signup function")
    var st = this.state;
    var pr = this.props;
 
@@ -283,6 +284,7 @@ signUp() {
 
    Api.server.post('signup', user)
    .then((signupResponse) => {
+      console.log("attempting to signup");
       if(!signupResponse || !signupResponse.jwt || !signupResponse.user){
          console.log("The sign up isn't successful");
       }else{
