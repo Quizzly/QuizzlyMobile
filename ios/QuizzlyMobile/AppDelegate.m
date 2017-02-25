@@ -11,6 +11,7 @@
 
 #import "RCTBundleURLProvider.h"
 #import "RCTRootView.h"
+#import "RCTPushNotificationManager.h"
 
 @implementation AppDelegate
 
@@ -31,7 +32,54 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+
+  if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+  } else {
+    // Register for Push Notifications before iOS 8
+    [application registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge |
+                                                     UIRemoteNotificationTypeAlert |
+                                                     UIRemoteNotificationTypeSound)];
+  }
+
   return YES;
 }
+
+// Required to register for notifications
+   - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings
+   {
+    [RCTPushNotificationManager didRegisterUserNotificationSettings:notificationSettings];
+
+   }
+   // Required for the register event.
+   - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+   {
+    NSLog(@"Obj-C Device Token:  %@", deviceToken);
+    [RCTPushNotificationManager didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+   }
+   // Required for the registrationError event.
+   - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+   {
+     NSLog(@"Problem : %@", error);
+    //[RCTPushNotificationManager didFailToRegisterForRemoteNotificationsWithError:error];
+   }
+   // Required for the notification event.
+   - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)notification
+   {
+    [RCTPushNotificationManager didReceiveRemoteNotification:notification];
+   }
+   // Required for the localNotification event.
+   - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+   {
+    [RCTPushNotificationManager didReceiveLocalNotification:notification];
+   }
+
+
 
 @end
