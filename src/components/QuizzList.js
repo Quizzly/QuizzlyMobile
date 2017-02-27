@@ -32,6 +32,24 @@ export default class Entrance extends Component {
     Api.server.find('quiz',{course: this.props.course.id})
     .then((quizzes) => {
       console.log("quizzes", quizzes);
+      for(var i = quizzes.length - 1; i >= 0; i--) {
+        var indices = [];
+        for(var j = 0; j < quizzes[i].questions.length; j++) {
+          if(typeof quizzes[i].questions[j].lastAsked == "undefined") {
+            indices.push(j);
+          }
+        }
+        if(indices.length == quizzes[i].questions.length) {
+          quizzes.splice(i, 1);
+        }
+        // if(typeof quizzes[i].questions[0].lastAsked == "undefined") {
+        //   indices.push(i);
+        // }
+      }
+      // for(var i = indices.length - 1; i >= 0; i--) {
+      //   quizzes.splice(indices[i], 1);
+      // }
+      console.log("quizzes after removal", quizzes);
       this.setState({
          quizzes: quizzes,
          dataSource: ds.cloneWithRows(quizzes)

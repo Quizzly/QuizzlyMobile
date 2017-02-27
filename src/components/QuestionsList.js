@@ -32,6 +32,15 @@ export default class Entrance extends Component {
     Api.server.find('question',{quiz: this.props.quiz.id})
     .then((questions) => {
       console.log("question", questions);
+      var indices = [];
+      for(var i = 0; i < questions.length; i++) {
+        if(typeof questions[i].lastAsked == "undefined") {
+          indices.push(i);
+        }
+      }
+      for(var i = indices.length - 1; i >= 0; i--) {
+        questions.splice(indices[i], 1);
+      }
       this.setState({
          questions: questions,
          dataSource: ds.cloneWithRows(questions)
@@ -45,6 +54,8 @@ export default class Entrance extends Component {
            <NavBar
              title={this.props.quiz.title}
              back={this.back.bind(this)}
+             currentPage = {this}
+             quizTitle = {this.props.quiz.title}
              hasBack
            />
         </View>

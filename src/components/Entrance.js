@@ -21,10 +21,10 @@ export default class Entrance extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         email: 'myshoe@usc.edu',
+         email: 'batman@usc.edu',
          password: 'test',
-         firstName: 'Joe',
-         lastName: 'Biden',
+         firstName: '',
+         lastName: '',
          isSignUp: false,
          deviceToken: ''
       };

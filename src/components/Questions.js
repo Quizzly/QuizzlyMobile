@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {
   Text,
   View,
-  TouchableHighlight,
+  TouchableOpacity,
   StyleSheet,
   TextInput,
+  AlertIOS,
 } from 'react-native';
 
 import s from '../modules/Style.js';
@@ -31,7 +32,11 @@ export default class Questions extends Component {
               C:this.props.question.answers[2].text,
               Type:type,
               index:'0'},
-            ]
+            ],
+            pressedA: false,
+            pressedB: false,
+            pressedC: false,
+            pressedSubmit: false
           };
      }else if(length==4){
        this.state = {
@@ -44,7 +49,12 @@ export default class Questions extends Component {
              D:this.props.question.answers[3].text,
              Type:type,
              index:'0'},
-           ]
+           ],
+           pressedA: false,
+           pressedB: false,
+           pressedC: false,
+           pressedD: false,
+           pressedSubmit: false
          };
      }
    }else if(type == "freeResponse"){
@@ -64,7 +74,51 @@ export default class Questions extends Component {
     this.props.navigator.pop();
   }
 
+  pressA() {
+    if(this.state.pressedSubmit) return;
+    this.setState({
+      pressedA: true,
+      pressedB: false,
+      pressedC: false
+    });
+    console.log("Answer A recorded.. ");
+  }
+
+  pressB() {
+    if(this.state.pressedSubmit) return;
+    this.setState({
+      pressedA: false,
+      pressedB: true,
+      pressedC: false
+    });
+    console.log("Answer B recorded.. ");
+  }
+
+  pressC() {
+    if(this.state.pressedSubmit) return;
+    this.setState({
+      pressedA: false,
+      pressedB: false,
+      pressedC: true
+    });
+    console.log("Answer C recorded.. ");
+  }
+
+  pressSubmit() {
+    if(!(this.state.pressedA ^ this.state.pressedB ^ this.state.pressedC)) {
+      AlertIOS.alert(
+        'Please choose an answer'
+        );
+      return;
+    }
+    this.setState({
+      pressedSubmit: true
+    })
+    console.log("Submit pressed..");
+  }
+
   goToAnswers(question) {
+    if(!this.state.pressedSubmit) return;
     console.log("HERE INSIDE THE GO TO ANSWER PAGE-> inputText  ",question);
     // console.log(this.props.question);
     this.props.navigator.push({
@@ -116,46 +170,29 @@ export default class Questions extends Component {
            />
 
            <Text>A.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer A recorded.. ");
-             }}
+           <TouchableOpacity
+             style={this.state.pressedA ? styles.qButtonPressed : styles.qButton}
+             onPress={this.pressA.bind(this)}
            >
              <Text style={styles.buttonText}>{question.A}</Text>
-           </TouchableHighlight>
+           </TouchableOpacity>
 
            <Text>B.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer B recorded.. ");
-             }}
+           <TouchableOpacity
+             style={this.state.pressedB ? styles.qButtonPressed : styles.qButton}
+             onPress={this.pressB.bind(this)}
            >
              <Text style={styles.buttonText}>{question.B}</Text>
-           </TouchableHighlight>
+           </TouchableOpacity>
 
 
            <Text>C.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer C recorded.. ");
-             }}
+           <TouchableOpacity
+             style={this.state.pressedC ? styles.qButtonPressed : styles.qButton}
+             onPress={this.pressC.bind(this)}
            >
              <Text style={styles.buttonText}>{question.C}</Text>
-           </TouchableHighlight>
-
-
-           <Text>D.)</Text>
-           <TouchableHighlight
-             style={styles.qButton}
-             onPress={function(){
-                console.log("Answer D recorded.. ");
-             }}
-           >
-             <Text style={styles.buttonText}>{question.D}</Text>
-           </TouchableHighlight>
+           </TouchableOpacity>
 
          </View>
 
@@ -201,12 +238,19 @@ export default class Questions extends Component {
           {this.renderNavBar()}
           {this.renderMultipleChoiceQuestion()}
 
-          <TouchableHighlight
-            style={[styles.button, {marginTop: 20}]}
+          <TouchableOpacity
+            style={[this.state.pressedSubmit ? styles.submitNotPressed : styles.button, {marginTop: 20}]}
+            onPress={this.pressSubmit.bind(this)}
+          >
+            <Text>    Submit    </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[this.state.pressedSubmit ? styles.button : styles.submitNotPressed, {marginTop: 20}]}
             onPress={this.goToAnswers.bind(this,pr.question)}
           >
-            <Text>Click me to See the Answer</Text>
-          </TouchableHighlight>
+            <Text>See Answer</Text>
+          </TouchableOpacity>
 
         </View>
       );
@@ -218,12 +262,21 @@ export default class Questions extends Component {
           {this.renderNavBar()}
           {this.renderFreeResponseQuestion()}
 
-          <TouchableHighlight
+          <TouchableOpacity
+            style={[styles.button, {marginTop: 20}]}
+            onPress={function() {
+
+            }}
+          >
+            <Text>    Submit    </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
             style={[styles.button, {marginTop: 20}]}
             onPress={this.goToAnswers.bind(this,pr.question)}
           >
-            <Text>Click me to See the Answer</Text>
-          </TouchableHighlight>
+            <Text>See Answer</Text>
+          </TouchableOpacity>
 
         </View>
       );
@@ -232,7 +285,7 @@ export default class Questions extends Component {
   }
 }
 
-const styles = StyleSheet.create({
+var styles = StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -251,9 +304,25 @@ const styles = StyleSheet.create({
      margin: 20,
      backgroundColor: '#E1FBFF'
   },
+  qButtonPressed: {
+     borderRadius:7,
+     borderWidth: .25,
+     width: 350,
+     height: 40,
+     justifyContent:'center',
+     alignSelf:'center',
+     margin: 20,
+     backgroundColor: '#F3E1FF'
+  },
   button: {
     padding: 20,
-    backgroundColor: 'green',
+    backgroundColor: '#F0FFE1',
+    alignSelf: 'center',
+    borderRadius: 10
+  },
+  submitNotPressed: {
+    padding: 20,
+    backgroundColor: '#DBDBD6',
     alignSelf: 'center',
     borderRadius: 10
   },

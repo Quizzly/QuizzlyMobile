@@ -38,6 +38,10 @@ export default class NavBar extends Component {
          console.log("refreshing quizzes");
          this.props.currentPage.componentDidMount();
       }
+      else if(this.props.title == this.props.quizTitle) {
+         console.log("refreshing questions");
+         this.props.currentPage.componentDidMount();
+      }
    }
 
    _sendLocalNotification() {
