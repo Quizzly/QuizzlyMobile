@@ -143,5 +143,6 @@ function chooseUrl(routeType) {
 
 var Api = module.exports = {
   server: new Route(Url.quizzlyProd),
+  db: new Route('http://52.41.106.241:1337'),
   // baseUrl: window.location.port == '8081' ? Url.localhost : Url.cornerProd,
 }

@@ -34,7 +34,7 @@ export default class Entrance extends Component {
       console.log("question", questions);
       var indices = [];
       for(var i = 0; i < questions.length; i++) {
-        if(typeof questions[i].lastAsked == "undefined") {
+        if(questions[i].lastAsked == null) {
           indices.push(i);
         }
       }

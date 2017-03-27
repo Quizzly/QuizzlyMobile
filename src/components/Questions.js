@@ -22,6 +22,12 @@ export default class Questions extends Component {
     var length = this.props.question.answers.length;
     var type = this.props.question.type;
 
+    var startTime = new Date();
+    var lastAskedTime = new Date(this.props.question.lastAsked);
+    var timeDiff = startTime.getTime() - lastAskedTime.getTime();
+    var secondsDiff = timeDiff / 1000;
+    console.log("seconds between:", secondsDiff);
+
     if(type=="multipleChoice"){
       if(length==3){
         this.state = {
@@ -36,7 +42,11 @@ export default class Questions extends Component {
             pressedA: false,
             pressedB: false,
             pressedC: false,
-            pressedSubmit: false
+            pressedSubmit: false,
+            duration: this.props.question.duration,
+            lastAsked: this.props.question.lastAsked,
+            secondsSinceAsked: secondsDiff,
+            canAnswer: this.props.question.duration > secondsDiff
           };
      }else if(length==4){
        this.state = {
@@ -54,7 +64,11 @@ export default class Questions extends Component {
            pressedB: false,
            pressedC: false,
            pressedD: false,
-           pressedSubmit: false
+           pressedSubmit: false,
+           duration: this.props.question.duration,
+           lastAsked: this.props.question.lastAsked,
+           secondsSinceAsked: secondsDiff,
+           canAnswer: this.props.question.duration > secondsDiff
          };
      }
    }else if(type == "freeResponse"){
@@ -64,7 +78,12 @@ export default class Questions extends Component {
            Type:type,
            index:'0'},
          ],
-         text: 'Please answer the question here'
+         text: 'Please answer the question here',
+         pressedSubmit: false,
+         duration: this.props.question.duration,
+         lastAsked: this.props.question.lastAsked,
+         secondsSinceAsked: secondsDiff,
+         canAnswer: this.props.question.duration > secondsDiff
        };
    }
 
@@ -105,12 +124,23 @@ export default class Questions extends Component {
   }
 
   pressSubmit() {
+    if(!this.state.canAnswer) return;
     if(!(this.state.pressedA ^ this.state.pressedB ^ this.state.pressedC)) {
       AlertIOS.alert(
         'Please choose an answer'
         );
       return;
     }
+    var answerIndex;
+    if(this.state.pressedA) answerIndex = 0;
+    else if(this.state.pressedB) answerIndex = 1;
+    else if(this.state.pressedC) answerIndex = 2;
+    else if(this.state.pressedD) answerIndex = 3;
+    Api.db.post('question/answer', {
+      questionKey: this.props.questionKey,
+      answer: this.props.question.answers[answerIndex].id,
+      text: null
+    });
     this.setState({
       pressedSubmit: true
     })
@@ -118,7 +148,7 @@ export default class Questions extends Component {
   }
 
   goToAnswers(question) {
-    if(!this.state.pressedSubmit) return;
+    if(this.state.canAnswer && !this.state.pressedSubmit) return;
     console.log("HERE INSIDE THE GO TO ANSWER PAGE-> inputText  ",question);
     // console.log(this.props.question);
     this.props.navigator.push({
@@ -199,6 +229,42 @@ export default class Questions extends Component {
       );
     });
   }
+
+  renderTimer(duration){
+    var newTime = new Date();
+    var lastAskedTime = new Date(this.state.lastAsked);
+    var timeDiff = newTime.getTime() - lastAskedTime.getTime();
+    var secondsDiff = timeDiff / 1000;
+    var timeLeft = Math.ceil(duration - secondsDiff);
+    this.timer = setTimeout(() => {
+      timeLeft--;
+      this.setState({
+        timeLeft: timeLeft,
+        canAnswer: timeLeft > 0
+      });
+    }, 1000);
+    if(timeLeft <= 0) {
+      clearTimeout(this.timer);
+      return (
+        <View>
+          <TouchableOpacity
+            style={[styles.button, {marginTop: 20}]}
+            onPress={this.back.bind(this)}
+          >
+            <Text>Question Has Ended. Go Back To Quiz.</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    else {
+      return(
+        <View>
+          <Text style={styles.buttonText}>{this.state.timeLeft}</Text>
+        </View>
+      );
+    }
+  }
+
   renderNavBar(){
      return (
         <View>
@@ -239,18 +305,20 @@ export default class Questions extends Component {
           {this.renderMultipleChoiceQuestion()}
 
           <TouchableOpacity
-            style={[this.state.pressedSubmit ? styles.submitNotPressed : styles.button, {marginTop: 20}]}
+            style={[this.state.canAnswer ? this.state.pressedSubmit ? styles.submitNotPressed : styles.button : styles.submitNotPressed, {marginTop: 20}]}
             onPress={this.pressSubmit.bind(this)}
           >
             <Text>    Submit    </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[this.state.pressedSubmit ? styles.button : styles.submitNotPressed, {marginTop: 20}]}
+            style={[this.state.canAnswer ? this.state.pressedSubmit ? styles.button : styles.submitNotPressed : styles.button, {marginTop: 20}]}
             onPress={this.goToAnswers.bind(this,pr.question)}
           >
             <Text>See Answer</Text>
           </TouchableOpacity>
+
+          {this.renderTimer(this.state.duration)}
 
         </View>
       );
