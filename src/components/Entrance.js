@@ -211,6 +211,8 @@ _onRemoteNotification(notification) {
    var pr = this.props;
    var st = this.state;
 
+   console.log("Question key::::: ", notification._data.questionKey);
+
    AlertIOS.alert(
       'Quiz Alert',
       'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
@@ -218,17 +220,18 @@ _onRemoteNotification(notification) {
          { text: 'Take Quiz',  onPress: function takeQuizRemote() {
             console.log("Notification KEY  ::: ", notification);
 
-            if (typeof notification._data.questionKey !== 'undefined') {
+            if (typeof notification._data.questionKey != 'undefined') {
                console.log("Question KEY  ::: ", notification._data.questionKey);
                Api.server.post('question/getopenquestion', {questionKey: notification._data.questionKey})
                .then((data) => {
                   console.log("Take Remote question -!!!! ::: ", data);
+                  data.question.timeRemaining = notification._data.timeRemaining
                   pr.navigator.push({
-                     name: 'AnswerQuestion',
-                     passProps: {state:this.state, question:data.question, questionKey:notification._data.questionKey, time:data.timeRemaining}
+                     name: 'Questions',
+                     passProps: {question:data.question}
                   });
                });
-            } else if(typeof notification._data.quizKey !== 'undefined') {
+            } else if(typeof notification._data.quizKey != 'undefined') {
                console.log("Quiz KEY  ::: ", notification._data.quizKey);
                Api.server.post('quiz/getopenquiz', {quizKey: notification._data.quizKey})
                .then((data) => {

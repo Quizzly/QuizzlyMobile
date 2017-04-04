@@ -137,9 +137,11 @@ export default class Questions extends Component {
     else if(this.state.pressedC) answerIndex = 2;
     else if(this.state.pressedD) answerIndex = 3;
     Api.db.post('question/answer', {
-      questionKey: this.props.questionKey,
+      questionKey: this.props.question.id,
       answer: this.props.question.answers[answerIndex].id,
-      text: null
+      text: null,
+    }).catch(function (data) {
+      console.log("DATA ::::", data);
     });
     this.setState({
       pressedSubmit: true
@@ -251,7 +253,7 @@ export default class Questions extends Component {
             style={[styles.button, {marginTop: 20}]}
             onPress={this.back.bind(this)}
           >
-            <Text>Question Has Ended. Go Back To Quiz.</Text>
+            <Text>Question Has Ended. Go Back.</Text>
           </TouchableOpacity>
         </View>
       );

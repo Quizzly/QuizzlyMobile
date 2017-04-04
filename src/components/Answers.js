@@ -97,14 +97,6 @@ export default class Answers extends Component {
       <View style={styles.container}>
         {this.renderNavBar()}
         {this.renderTextWells()}
-
-
-        <TouchableHighlight
-          style={styles.button}
-          onPress={this.back.bind(this)}
-        >
-          <Text>Click me to go back to Entrance</Text>
-        </TouchableHighlight>
       </View>
     );
   }

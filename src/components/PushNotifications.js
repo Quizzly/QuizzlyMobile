@@ -95,6 +95,7 @@ export default class PushNotfications extends Component {
   }
 
   _onRemoteNotification(notification) {
+    console.log("notification", notification);
     AlertIOS.alert(
       'Quiz Alert',
       'Please take 30 seconds to finish the quiz - ' + notification.getMessage(),
