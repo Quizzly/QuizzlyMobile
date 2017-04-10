@@ -261,7 +261,7 @@ export default class Questions extends Component {
     else {
       return(
         <View>
-          <Text style={styles.buttonText}>{this.state.timeLeft}</Text>
+          <Text style={styles.timeText}>{this.state.timeLeft}</Text>
         </View>
       );
     }
@@ -358,6 +358,11 @@ export default class Questions extends Component {
 var styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  timeText: {
+  		textAlign: 'center',
+		color: '#999999',
+		fontSize: 50,
   },
   buttonText:{
      textAlign: 'center',
