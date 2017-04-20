@@ -238,6 +238,7 @@ export default class Questions extends Component {
     var timeDiff = newTime.getTime() - lastAskedTime.getTime();
     var secondsDiff = timeDiff / 1000;
     var timeLeft = Math.ceil(duration - secondsDiff);
+    //var timeLeft = this.state.duration;
     this.timer = setTimeout(() => {
       timeLeft--;
       this.setState({
